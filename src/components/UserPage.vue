@@ -1,6 +1,6 @@
 <template>
  <div v-if="user != null" class="wrap">
-     <h2>Здравствуйте {{user.Firstname}} {{ user.Lastname}}!</h2>
+     <h2>Это страница пользователя {{user.Firstname}} {{ user.Lastname}}!</h2>
  </div>
 </template>
 
@@ -15,16 +15,17 @@ export default {
     }
   },
   methods:{
-      ...mapActions(["getMyData"]),
+      ...mapActions(["getUser"]),
   },
   computed:{
       ...mapGetters({
-        user: "getUser"
+        user: "getCurrentPageUser"
       })
       
   },
   created: function(){
-      this.$store.dispatch("getMyData");
+      
+      this.$store.dispatch("getUser", this.$route.params["login"]);
   }
 }
 </script>

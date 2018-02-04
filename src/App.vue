@@ -17,10 +17,9 @@ export default {
     Header: Header,
     Footer: Footer
   },
-  created: function(){
+  beforeCreate: function(){
        if(localStorage.getItem("tokenKey") !== null){
-         this.$store.state.authenticated = true;
-         
+         this.$store.dispatch("getMyData");
        }
     }
 }

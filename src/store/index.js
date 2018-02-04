@@ -14,36 +14,84 @@ const store = new Vuex.Store({
    
     state: {
         user: null,
-        authenticated: false
+        allUsersList: null,
+        authenticated: false,
+        currentUserPage: null
     },
 
     mutations: {
        setUser(state, newUser){
         state.user = newUser;
+       },
+       setUserFromLocalStorage(state){
+        if(localStorage.getItem("tokenKey") !== null){
+           state.authenticated = true;
+          }
+       },
+       setAllUserList(state, allUsers){
+        console.log(state.user );
+       
+        state.allUsersList = allUsers.map(element => {
+            if(state.user == null || element.Login != state.user.Login){
+                element.isAuthorize = false;
+            }else element.isAuthorize = true;
+            return element;
+        });
+       
+       },
+       setCurrentUserPage(state, currentUser){
+        state.currentUserPage = currentUser;
+       },
+       setAuthenticatedState(state, isAuthenticated){
+        state.authenticated = isAuthenticated;
        }
     },
 
     actions: {
 
+        getUser({commit}, login){
+            axios.get(serverUrl + '/api/Account/get/login',{
+                params: {login}
+            })
+            .then((res)=>{
+                console.log(res.data);
+                commit("setCurrentUserPage", res.data)
+            }).catch((err)=>{
+                console.log(err);
+                router.push("/404");
+            })
+        },
+
+        getAllUsers({commit}){
+            axios.get(serverUrl + '/api/Account/getAll')
+            .then((res)=>{
+
+                console.log(res.data);
+                commit("setAllUserList", res.data);
+            }).catch((err)=>{
+                
+                console.log(err);
+
+            })
+        },
+
+
         getMyData({commit}){
             var email = localStorage.getItem("username");
             var token = localStorage.getItem("tokenKey");
-            //console.log(email);
-            //console.log(token);
             var params = new URLSearchParams();
             params.append( "email", email);
-            axios.get(serverUrl + '/api/Account/Get',{
-                params:{"email": email,"origin":"*"},
+            axios.get(serverUrl + '/api/Account/get/email',{
+                params:{"email": email},
                 headers:{
                     
                     "Authorization": "Bearer " + token
                 }
             })
             .then((res)=>{
-
-                //console.log(res.data);
                 commit("setUser", res.data);
-
+                commit("setAuthenticatedState", true);
+                
             }).catch((err)=>{
                 
                 console.log(err);
@@ -100,8 +148,7 @@ const store = new Vuex.Store({
              
                 console.log(res);
                 localStorage.setItem("tokenKey", res.data.access_token);
-                localStorage.setItem("username", email);             
-                this.state.authenticated = true;
+                localStorage.setItem("username", email);
                 router.push("im");
             }).catch((err)=>{
                 console.log(err);
@@ -142,6 +189,15 @@ const store = new Vuex.Store({
         isAuthenticated: state => {return state.authenticated},
         getUser(state) {
             return state.user
+        },
+        getAllUsersList(state){
+            return state.allUsersList;
+        },
+        getCurrentPageUser(state) {
+            return state.currentUserPage;
+        },
+        getMyLogin(state){
+            return state.user.Login;
         }
     }
     })

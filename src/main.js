@@ -14,8 +14,8 @@ sync(store, router);
 
 new Vue({
   el: '#app',
-  store,
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

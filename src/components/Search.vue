@@ -1,40 +1,64 @@
 <template>
  <div class="wrap">
-     <h2>Поиск</h2>
-     <input type="text">
-     <button class="button" @click="search">Найти</button>
-     <Aplayer>
-    </Aplayer>
+    <h2>Все пользователи сайта</h2>
+     <div class="all-user-wrapper">
+       <div class="card" v-for="(item,index) in listUsers" :key='index'>
+          <router-link :to="getPath(index)"> 
+            {{item.Firstname}} {{item.Lastname}}
+          </router-link>
+       </div>
+       
+     </div>
  </div>
 </template>
 
+
 <script>
 
-// autoplay :music="{
-//         title: 'Preparation',
-//         author: 'Hans Zimmer/Richard Harvey',
-//         url: 'https://www.computerhope.com/jargon/m/example.mp3',
-//         lrc: '[00:00.00]lrc here\n[00:01.00]aplayer'
-//       }"
-
-import {mapActions} from "vuex"
-import Aplayer from 'vue-aplayer'
+import { mapGetters } from 'vuex'
+import { mapActions } from "vuex"
+import UserCard from './UserCard.vue'
 export default {
   name: 'search',
   components: {
-        "Aplayer": Aplayer
+        "user-card": UserCard
   },
   data () {
     return {
      
     }
-  }, methods:{
+  }, 
+  methods:{
       ...mapActions(["search"]),
-  }
+      getPath(index){
+        if(this.listUsers[index].isAuthorize == true)
+          return "/im";
+        return "/" + this.listUsers[index].Login;
+      }
+  },
+  created: function(){
+      this.$store.dispatch("getAllUsers");
+  },
+  computed:{
+      ...mapGetters({
+        listUsers: "getAllUsersList"
+      }),
+     
+      
+  },
  
 }
 </script>
 
 <style scoped>
+  .card{
+    padding: 1em;
+  border: 1px solid black;
+  margin-bottom: 1em;
+  }
 
+  .all-user-wrapper{
+    padding: 1em;
+
+  }
 </style>

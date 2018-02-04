@@ -2,7 +2,7 @@
   <header>
       <div>
          <router-link v-if="$store.state.authenticated == true" class="button" to="/im">Моя страница</router-link>
-         <router-link v-if="$store.state.authenticated == true" class="button" to="/search"> Поиск</router-link>
+         <router-link v-if="$store.state.authenticated == true" class="button" to="/allUser"> Поиск</router-link>
            
       </div>
       <div class="login">
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex"
+import {mapActions, mapGetters} from "vuex"
 export default {
   name: 'Header',
   data () {
@@ -23,7 +23,8 @@ export default {
     }
   },
     methods:{
-      ...mapActions(["logOf"])
+      ...mapActions(["logOf"]),
+        
   }
  
 }
