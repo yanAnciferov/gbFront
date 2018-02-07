@@ -7,6 +7,7 @@ import Im from '@/components/Im'
 import AllUser from '@/components/Search'
 import UserPage from '@/components/UserPage'
 import NotFound from '@/components/404.vue'
+import TestAvatar from '@/components/UploadAvatarWindow.vue'
 import axios from "axios"
 import store from "../store/index.js"
 
@@ -47,23 +48,34 @@ export default new Router({
     
       }
     },
-    {
-      path: '/im',
-      name: 'Im',
-      component: Im,
-      beforeEnter: (to, from, next)=>{
+    // {
+    //   path: '/im',
+    //   name: 'Im',
+    //   component: Im,
+    //   beforeEnter: (to, from, next)=>{
 
-        if(localStorage.getItem("tokenKey") ) {
-          next();
-        }
-        else next('/login');
+    //     if(localStorage.getItem("tokenKey") ) {
+    //       next();
+    //     }
+    //     else next('/login');
     
-      }
-    },
+    //   }
+    // },
     {
       path: '/allUser',
       name: 'AllUser',
       component: AllUser,
+      beforeEnter: (to, from, next)=>{
+        if(localStorage.getItem("tokenKey") ) {
+          next();
+        }
+        else next('/login');
+      }
+    },
+    {
+      path: '/testAvatar',
+      name: 'TestAvatar',
+      component: TestAvatar,
       beforeEnter: (to, from, next)=>{
         if(localStorage.getItem("tokenKey") ) {
           next();
@@ -77,7 +89,7 @@ export default new Router({
       component: UserPage
       
     }, 
-    //{ path: '/404', component: NotFound },  
+    { path: '/404', component: NotFound },  
     { path: '*', component: NotFound },  
   ]
 })

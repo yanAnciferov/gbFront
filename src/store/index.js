@@ -16,7 +16,8 @@ const store = new Vuex.Store({
         user: null,
         allUsersList: null,
         authenticated: false,
-        currentUserPage: null
+        currentUserPage: null,
+        showFullScreenLoader: true
     },
 
     mutations: {
@@ -29,44 +30,73 @@ const store = new Vuex.Store({
           }
        },
        setAllUserList(state, allUsers){
-        console.log(state.user );
        
-        state.allUsersList = allUsers.map(element => {
-            if(state.user == null || element.Login != state.user.Login){
-                element.isAuthorize = false;
-            }else element.isAuthorize = true;
-            return element;
-        });
+            state.allUsersList = allUsers
+            .map(element => {
+                if(element.AvatarImage != null){
+                    element.AvatarImage = serverUrl + element.AvatarImage;
+                }
+                return element;
+            });
        
        },
-       setCurrentUserPage(state, currentUser){
+
+       setCurrentUserPage(state, currentUser){ 
+        if(currentUser.AvatarImage != null)
+            currentUser.AvatarImage = serverUrl + currentUser.AvatarImage;
         state.currentUserPage = currentUser;
+
        },
+
        setAuthenticatedState(state, isAuthenticated){
         state.authenticated = isAuthenticated;
+       },
+
+       showFullScreenLoader(state, isDuring){
+        state.showFullScreenLoader = isDuring;
        }
     },
 
     actions: {
+
+        uploadFiles ({commit, getters}) {
+            var s = this
+            const data = new FormData(document.getElementById('uploadForm'));
+            var imagefile = document.querySelector('#file');
+            data.append('upload', imagefile.files[0]);
+            var params = new URLSearchParams();
+            console.log(getters.getMyLogin);
+            var email = localStorage.getItem("username");
+            params.append( "email", email);
+            axios.post(serverUrl + '/api/Account/setAvatar', data, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              params
+            })
+              .then(response => {
+                console.log(response)
+              })
+              .catch(error => {
+                console.log(error.response)
+              })
+          },
 
         getUser({commit}, login){
             axios.get(serverUrl + '/api/Account/get/login',{
                 params: {login}
             })
             .then((res)=>{
-                console.log(res.data);
                 commit("setCurrentUserPage", res.data)
             }).catch((err)=>{
                 console.log(err);
-                router.push("/404");
+                router.replace("/404");
             })
         },
 
         getAllUsers({commit}){
             axios.get(serverUrl + '/api/Account/getAll')
             .then((res)=>{
-
-                console.log(res.data);
                 commit("setAllUserList", res.data);
             }).catch((err)=>{
                 
@@ -91,10 +121,17 @@ const store = new Vuex.Store({
             .then((res)=>{
                 commit("setUser", res.data);
                 commit("setAuthenticatedState", true);
+                commit("showFullScreenLoader", false);
+                commit("setCurrentUserPage", res.data)
                 
             }).catch((err)=>{
                 
                 console.log(err);
+                commit("setUser", null);
+                commit("setAuthenticatedState", false);
+                commit("showFullScreenLoader", false);
+                var email = localStorage.removeItem("username");
+                var token = localStorage.removeItem("tokenKey");
 
             })
         },
@@ -160,28 +197,6 @@ const store = new Vuex.Store({
             localStorage.removeItem("tokenKey");
             this.state.authenticated = false;
             router.push("login");
-        },
-
-        search({commit}){
-            var securityStamp = sessionStorage.getItem("tokenInfo");
-            console.log(securityStamp);
-            var ID = "2903dfd7-3212-4682-8f75-3543ecde5182"
-
-
-            axios.post(serverUrl + '/Account/GetUserInfoByID?ID=' + ID,{
-                headers:{
-                    "SecurityStamp": "AI0j2qzeuRniRlh1jvfm2waxk1W+VJmKbxRi1t03IsNClZ9eH7YETPbZCSHd3Y2mJg=="
-                }
-            })
-            .then((res)=>{
-
-                console.log(res);
-
-            }).catch((err)=>{
-                
-                console.log(err);
-
-            })
         }        
     },
 
@@ -198,6 +213,15 @@ const store = new Vuex.Store({
         },
         getMyLogin(state){
             return state.user.Login;
+        },
+
+        isShowFullScreenLoader(state){
+            return state.showFullScreenLoader;
+        },
+
+        isMyPage(state, login){
+            console.log(state.user.Login);
+            return state.user.Login === login;
         }
     }
     })

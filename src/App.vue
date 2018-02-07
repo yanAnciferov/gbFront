@@ -1,7 +1,8 @@
 <template>
   <div id="app">
+    <Loader v-if="$store.getters.isShowFullScreenLoader == true"/>
     <Header/>
-    <router-view/>
+    <router-view v-if="$store.getters.isShowFullScreenLoader == false" />
     <Footer/>
   </div>
 </template>
@@ -10,16 +11,23 @@
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import Loader from '@/components/Loader'
+
 import {mapActions} from "vuex"
+
 export default {
   name: 'App',
   components: {
     Header: Header,
-    Footer: Footer
+    Footer: Footer,
+    Loader: Loader
   },
   beforeCreate: function(){
+
        if(localStorage.getItem("tokenKey") !== null){
          this.$store.dispatch("getMyData");
+       }else{
+         this.$store.commit("showFullScreenLoader", false);
        }
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <header>
       <div>
-         <router-link v-if="$store.state.authenticated == true" class="button" to="/im">Моя страница</router-link>
+         <router-link v-if="$store.state.authenticated == true" class="button" :to="getMyLogin">Моя страница</router-link>
          <router-link v-if="$store.state.authenticated == true" class="button" to="/allUser"> Поиск</router-link>
            
       </div>
@@ -22,9 +22,14 @@ export default {
       
     }
   },
-    methods:{
-      ...mapActions(["logOf"]),
-        
+  methods:{
+      ...mapActions(["logOf"]) 
+  },
+  computed:{
+    ...mapGetters(["getMyLogin"]),
+    getUrl(){
+      return "/" + this.getMyLogin;
+    }
   }
  
 }
