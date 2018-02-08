@@ -7,7 +7,7 @@ import Im from '@/components/Im'
 import AllUser from '@/components/Search'
 import UserPage from '@/components/UserPage'
 import NotFound from '@/components/404.vue'
-import TestAvatar from '@/components/UploadAvatarWindow.vue'
+import Settings from '@/components/Settings.vue'
 import axios from "axios"
 import store from "../store/index.js"
 
@@ -28,10 +28,10 @@ export default new Router({
       component: RegistrationPage,
       beforeEnter: (to, from, next)=>{
 
-        if(!localStorage.getItem("tokenKey")) {
+        if(!store.getters.isAuthenticated) {
           next();
         }
-        else next('/im');
+        else next(store.getters.getMyLogin);
     
       }
     },
@@ -41,10 +41,10 @@ export default new Router({
       component: LoginPage,
       beforeEnter: (to, from, next)=>{
 
-        if(!localStorage.getItem("tokenKey")) {
+        if(!store.getters.isAuthenticated) {
           next();
         }
-        else next('/im');
+        else next(store.getters.getMyLogin);
     
       }
     },
@@ -64,18 +64,12 @@ export default new Router({
     {
       path: '/allUser',
       name: 'AllUser',
-      component: AllUser,
-      beforeEnter: (to, from, next)=>{
-        if(localStorage.getItem("tokenKey") ) {
-          next();
-        }
-        else next('/login');
-      }
+      component: AllUser
     },
     {
-      path: '/testAvatar',
-      name: 'TestAvatar',
-      component: TestAvatar,
+      path: '/settings',
+      name: 'Settings',
+      component: Settings,
       beforeEnter: (to, from, next)=>{
         if(localStorage.getItem("tokenKey") ) {
           next();

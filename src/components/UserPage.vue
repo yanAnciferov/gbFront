@@ -25,7 +25,8 @@ export default {
       ...mapGetters({
         user: "getCurrentPageUser",
         myPage: "isMyPage",
-        myLogin: "getMyLogin" 
+        myLogin: "getMyLogin",
+        isAuth: "isAuthenticated"
       }),
       AvatarURL(){
           if(this.user.AvatarImage !== null)
@@ -35,9 +36,8 @@ export default {
       
   },
   created: function(){
-      
-    this.isMyPage = this.$route.params["login"] == this.myLogin;
-    if(this.isMyPage){
+      this.isMyPage = this.$route.params["login"] == this.myLogin;
+    if(this.isAuth && this.isMyPage){
         this.$store.dispatch("getMyData");
     }else{
         this.$store.dispatch("getUser", this.$route.params["login"]);
@@ -45,8 +45,8 @@ export default {
       
   },
   beforeRouteUpdate(to, from, next){
-       this.isMyPage = to.params["login"] == this.myLogin;
-      if(this.isMyPage){
+      this.isMyPage = to.params["login"] == this.myLogin
+      if(this.isAuth && this.isMyPage){
           this.$store.dispatch("getMyData");
       }else{
           this.$store.dispatch("getUser", this.$route.params["login"]);

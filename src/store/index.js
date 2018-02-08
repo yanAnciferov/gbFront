@@ -105,8 +105,10 @@ const store = new Vuex.Store({
             })
         },
 
-
-        getMyData({commit}){
+        
+        getMyData({commit, getters}){
+            
+            
             var email = localStorage.getItem("username");
             var token = localStorage.getItem("tokenKey");
             var params = new URLSearchParams();
@@ -119,11 +121,13 @@ const store = new Vuex.Store({
                 }
             })
             .then((res)=>{
+
                 commit("setUser", res.data);
                 commit("setAuthenticatedState", true);
                 commit("showFullScreenLoader", false);
-                commit("setCurrentUserPage", res.data)
-                
+                commit("setCurrentUserPage", res.data);
+                router.push(res.data.Login);
+
             }).catch((err)=>{
                 
                 console.log(err);
@@ -166,7 +170,7 @@ const store = new Vuex.Store({
             }
         },
 
-        getToken({commit }, {email, password}){
+        getToken({commit, dispatch }, {email, password}){
             
 
             var params = new URLSearchParams();
@@ -186,7 +190,8 @@ const store = new Vuex.Store({
                 console.log(res);
                 localStorage.setItem("tokenKey", res.data.access_token);
                 localStorage.setItem("username", email);
-                router.push("im");
+                commit("showFullScreenLoader", true);
+                dispatch("getMyData");
             }).catch((err)=>{
                 console.log(err);
             })
@@ -196,6 +201,7 @@ const store = new Vuex.Store({
         logOf({commit}){
             localStorage.removeItem("tokenKey");
             this.state.authenticated = false;
+            this.state.user = null;
             router.push("login");
         }        
     },
@@ -220,7 +226,8 @@ const store = new Vuex.Store({
         },
 
         isMyPage(state, login){
-            console.log(state.user.Login);
+            if(state.authenticated == false)
+                return false;
             return state.user.Login === login;
         }
     }

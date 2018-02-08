@@ -31,8 +31,6 @@ export default {
   methods:{
       ...mapActions(["search"]),
       getPath(index){
-        if(this.listUsers[index].isAuthorize == true)
-          return "/im";
         return "/" + this.listUsers[index].Login;
       }
   },

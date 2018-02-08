@@ -1,9 +1,20 @@
 <template>
   <header>
       <div>
-         <router-link v-if="$store.state.authenticated == true" class="button" :to="getMyLogin">Моя страница</router-link>
-         <router-link v-if="$store.state.authenticated == true" class="button" to="/allUser"> Поиск</router-link>
-           
+         <router-link 
+           v-if="$store.state.authenticated == true" 
+           class="button" 
+           :to="getMyLogin"
+         >Моя страница</router-link>
+         <router-link
+           class="button"
+           to="/allUser"
+          > Поиск</router-link>
+           <router-link
+           v-if="$store.state.authenticated == true"
+           class="button"
+           to="/settings"
+          > Настройки</router-link>
       </div>
       <div class="login">
             <router-link v-if="$store.state.authenticated == false" class="button" to="/login">Войти</router-link>

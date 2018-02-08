@@ -1,12 +1,17 @@
  <template>
  <div class="wrap">
-     <form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
+     <h2>Настройки профиля</h2>
+     <div class="block">
+         <label for="uploadForm">Сменить аватар</label>
+        <form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
 
-      <input id="file" type="file" @change="processFile">
+        <input id="file" type="file" @change="processFile">
 
-      <input v-if="imageUrl" type=button value=Upload @click="uploadFiles">
+        <input v-if="imageUrl" type=button value=Upload @click="uploadFiles">
 
-    </form>
+        </form>
+     </div>
+    
  </div>
 </template>
 
@@ -16,7 +21,7 @@
 import { mapActions } from "vuex"
 
 export default {
-  name: 'search',
+  name: 'settings',
   data () {
       return {
         correctlyImage: false
@@ -47,5 +52,11 @@ export default {
 </script>
 
 <style scoped>
-  
+  .wrap{
+      padding: 1em;
+  }
+  .block{
+      border: 1px solid black;
+      padding: 1em;
+  }
 </style>
