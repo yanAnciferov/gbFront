@@ -21,7 +21,8 @@
         </div>
         <div class="form-element">
             <label for="Email">Укажите вашу почту </label>
-            <input   v-model.lazy="registrationModel.email" type="email" name="Email">
+            <input @change="validateEmail"  v-model.lazy="registrationModel.email" type="email" name="Email">
+            <span v-if="emailValidState">Такая почта уже занята!</span>
         </div>
         <div  class="form-element">
             <label for="Password">Придумайте пароль</label>
@@ -63,6 +64,7 @@
 <script>
 
 import {mapActions} from "vuex"
+import axios from "axios"
 
 export default {
   
@@ -77,13 +79,22 @@ export default {
             email: "",
             password: "",
             confirmPassword: "",
-        }
+        },
+        emailValidState: false
     }
   }, 
   methods:{
-      ...mapActions(["registration"]),
-      validateDate(){
-
+      ...mapActions(["registration", "emailValid"]),
+      validateEmail(){
+         axios.get('http://localhost:65266/api/Account/IsUserExists',{
+                params: {
+                    "email": this.registrationModel.email
+                }
+            }).then(res => {
+                console.log(res);
+            }).catch(error =>{
+                this.emailValidState = error.response.status !== 204;
+            })
       }
   },
   computed: {

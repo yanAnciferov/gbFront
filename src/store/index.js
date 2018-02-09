@@ -35,7 +35,8 @@ const store = new Vuex.Store({
             .map(element => {
                 if(element.AvatarImage != null){
                     element.AvatarImage = serverUrl + element.AvatarImage;
-                }
+                } else element.AvatarImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvwpWlQPbOy0hMDI5-jJ8iyIXhBT_hZEKD7SkK3JdggKQDk3okQ";
+      
                 return element;
             });
        
@@ -44,6 +45,7 @@ const store = new Vuex.Store({
        setCurrentUserPage(state, currentUser){ 
         if(currentUser.AvatarImage != null)
             currentUser.AvatarImage = serverUrl + currentUser.AvatarImage;
+        else currentUser.AvatarImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvwpWlQPbOy0hMDI5-jJ8iyIXhBT_hZEKD7SkK3JdggKQDk3okQ";
         state.currentUserPage = currentUser;
 
        },
@@ -58,6 +60,21 @@ const store = new Vuex.Store({
     },
 
     actions: {
+
+
+        emailValid({commit, getters}, email){
+            axios.get(serverUrl + '/api/Account/IsUserExists',{
+                params: {email}
+            }).then(res => {
+                console.log(res);
+            }).catch(error =>{
+                if(error.response.status == 404){
+                    return true;
+                }else{
+                    return false;
+                }
+            })
+        },
 
         uploadFiles ({commit, getters}) {
             var s = this

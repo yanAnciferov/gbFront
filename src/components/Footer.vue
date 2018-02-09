@@ -24,8 +24,9 @@ footer{
     flex-direction: column;
     text-align: center;
     width: 100%;
-    border-top: 1px solid black;
     box-sizing: border-box;
     padding: 1.5em;
+    background-color: #333;
+    color: #999;
 }
 </style>

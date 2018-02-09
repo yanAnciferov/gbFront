@@ -47,7 +47,7 @@ export default {
 
 form{
     margin: 2em auto;
-    background-color: #ccc;
+    background-color: #333;
     width: 30em;
     padding: 1.5em;
 }
@@ -70,14 +70,16 @@ input{
   margin-top: 1em;
   padding: .5em 1em ; 
   border: none;
-  background-color: rgb(24, 62, 187);
+  background-color: transparent;
   color: white;
+  cursor: pointer;
 }
 
 label{
     font-weight: bold;
     text-align: left;
     margin-bottom: .5em;
+    color: #999;
 }
 
 .input-container{

@@ -52,19 +52,24 @@ header{
     display: flex;
     box-sizing: border-box;
     justify-content: space-between;
-    padding: 1.5em;
+    padding: 1em;
     width: 100%;
-    border-bottom: 1px solid black;
+    box-shadow: black 0px  0px 2px;
+    background-color: #333;
 }
 
 .button{
-    margin-top: 1em;
-  padding: .5em 1em ; 
+  margin: 0 1em;
   border: none;
-  background-color: rgb(24, 62, 187);
-  color: white;
+  background-color: transparent;
+  color: #aaa;
   text-transform: none;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover{
+  color: white;
 }
 
 .login > .button{

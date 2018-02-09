@@ -2,12 +2,7 @@
  <div class="wrap">
     <h2>Все пользователи сайта</h2>
      <div class="all-user-wrapper">
-       <div class="card" v-for="(item,index) in listUsers" :key='index'>
-          <router-link :to="getPath(index)"> 
-            {{item.Firstname}} {{item.Lastname}}
-          </router-link>
-       </div>
-       
+       <UserCard class="card" :user="item" v-for="(item,index) in listUsers" :key='index'/>
      </div>
  </div>
 </template>
@@ -17,11 +12,11 @@
 
 import { mapGetters } from 'vuex'
 import { mapActions } from "vuex"
-import UserCard from './UserCard.vue'
+import UserCard from '@/components/UserCard'
 export default {
   name: 'search',
   components: {
-        "user-card": UserCard
+      UserCard
   },
   data () {
     return {
@@ -29,10 +24,7 @@ export default {
     }
   }, 
   methods:{
-      ...mapActions(["search"]),
-      getPath(index){
-        return "/" + this.listUsers[index].Login;
-      }
+      ...mapActions(["search"])
   },
   created: function(){
       this.$store.dispatch("getAllUsers");
@@ -50,9 +42,7 @@ export default {
 
 <style scoped>
   .card{
-    padding: 1em;
-  border: 1px solid black;
-  margin-bottom: 1em;
+    margin-bottom: 1em;
   }
 
   .all-user-wrapper{

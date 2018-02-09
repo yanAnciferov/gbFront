@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <Loader v-if="$store.getters.isShowFullScreenLoader == true"/>
-    <Header/>
+    
+    <Header class="header"/>
     <router-view v-if="$store.getters.isShowFullScreenLoader == false" />
-    <Footer/>
+    <Footer class="footer"/>
   </div>
 </template>
 
@@ -38,9 +39,12 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
+  padding: 0 2em;
+  padding-top: 4em;
+  padding-bottom: 6em;
   color: #2c3e50;
-  min-height: 100vh;
+  min-height: calc(100vh - 10em);
+  position: relative;
 
 }
 
@@ -52,5 +56,17 @@ body, html{
 Footer{
     bottom: 0;
     left: 0;
+}
+
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.footer{
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 </style>
