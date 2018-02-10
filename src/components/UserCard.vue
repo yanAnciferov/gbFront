@@ -34,6 +34,7 @@ export default {
     padding: 1em;
     max-height: 10em;
     width: 100%;
+    background-color: white;
   }
 
   .image-wrapper{

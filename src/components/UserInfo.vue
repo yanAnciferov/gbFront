@@ -1,19 +1,20 @@
 <template>
- <div class="wrap">
+ <div class="wrap" v-if="user != null">
     <h2>{{user.Lastname}} {{user.Firstname}}</h2>
-    <div class="image-wrapper">
-        <div class="image-border">
-            <img :src="user.AvatarImage" alt="avatar">
-        </div>
-    </div>
+    <Avatar :image="user.AvatarImage" />
  </div>
 </template>
 
 <script>
 
 
+import Avatar from "@/components/Avatar"
+
 export default {
   name: 'userInfo',
+  components:{
+    Avatar
+  },
   props: ["user"],
   data () {
     return {
@@ -29,6 +30,7 @@ export default {
     box-shadow: 0px 2px 4px #888;
     padding: 1em;
     max-width: 15em;
+    background-color: white;
   }
 
   .image-wrapper{

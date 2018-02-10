@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <Loader v-if="$store.getters.isShowFullScreenLoader == true"/>
-    
+    <Loader class="loader" v-if="$store.getters.isShowFullScreenLoader == true"/>
     <Header class="header"/>
+    <Player class="player"/>
     <router-view v-if="$store.getters.isShowFullScreenLoader == false" />
-    <Footer class="footer"/>
+    <Footer  class="footer"/>
   </div>
 </template>
 
@@ -13,18 +13,27 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Loader from '@/components/Loader'
+import Player from '@/components/Player'
+import LoadWindow from '@/components/LoadWindow'
 
 import {mapActions} from "vuex"
 
 export default {
   name: 'App',
   components: {
-    Header: Header,
-    Footer: Footer,
-    Loader: Loader
+    Header,
+    Footer,
+    Loader,
+    Player,
+    LoadWindow
   },
-  beforeCreate: function(){
+  methods:{
+    onScroll(){
+      console.dir(footer);
 
+    }
+  },
+  beforeCreate(){
        if(localStorage.getItem("tokenKey") !== null){
          this.$store.dispatch("getMyData");
        }else{
@@ -45,6 +54,7 @@ export default {
   color: #2c3e50;
   min-height: calc(100vh - 10em);
   position: relative;
+  background-color: #fefefe;
 
 }
 
@@ -53,10 +63,10 @@ body, html{
   margin: 0;
 }
 
-Footer{
-    bottom: 0;
-    left: 0;
+.loader{
+  z-index: 999;
 }
+
 
 .header{
   position: fixed;
@@ -68,5 +78,13 @@ Footer{
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.player{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  box-shadow: -1px 3px 10px black;
 }
 </style>

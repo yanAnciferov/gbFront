@@ -22,7 +22,10 @@ export default {
       userInfo
   },
   methods:{
-      ...mapActions(["getUser", "getMyData"]),
+      ...mapActions(["getUser", "getMyData",]),
+      startPlay(){
+          this.$store.commit("setSoundToPlayer", "http://localhost:65266/Images/wakeup.mp3");
+      }
   },
   computed:{
       ...mapGetters({

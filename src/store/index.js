@@ -17,18 +17,23 @@ const store = new Vuex.Store({
         allUsersList: null,
         authenticated: false,
         currentUserPage: null,
-        showFullScreenLoader: true
+        showFullScreenLoader: true,
+        showPlayer: false,
+        isPlay: false,
+        currentTrack: null
     },
 
     mutations: {
        setUser(state, newUser){
         state.user = newUser;
        },
+
        setUserFromLocalStorage(state){
         if(localStorage.getItem("tokenKey") !== null){
            state.authenticated = true;
           }
        },
+
        setAllUserList(state, allUsers){
        
             state.allUsersList = allUsers
@@ -43,6 +48,10 @@ const store = new Vuex.Store({
        },
 
        setCurrentUserPage(state, currentUser){ 
+        if(currentUser == null){
+            state.currentUserPage = null
+            return;
+        }
         if(currentUser.AvatarImage != null)
             currentUser.AvatarImage = serverUrl + currentUser.AvatarImage;
         else currentUser.AvatarImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvwpWlQPbOy0hMDI5-jJ8iyIXhBT_hZEKD7SkK3JdggKQDk3okQ";
@@ -56,12 +65,18 @@ const store = new Vuex.Store({
 
        showFullScreenLoader(state, isDuring){
         state.showFullScreenLoader = isDuring;
+       },
+
+       addSoundToQueue(state, soud){
+        state.soundQueue.push(soud);
+       },
+
+       setSoundToPlayer(state, soud){
+        state.currentTrack = soud;
        }
     },
 
     actions: {
-
-
         emailValid({commit, getters}, email){
             axios.get(serverUrl + '/api/Account/IsUserExists',{
                 params: {email}
@@ -76,7 +91,8 @@ const store = new Vuex.Store({
             })
         },
 
-        uploadFiles ({commit, getters}) {
+        uploadFiles ({commit, getters}, loadWindowState) {
+            showLoadWindow = true;
             var s = this
             const data = new FormData(document.getElementById('uploadForm'));
             var imagefile = document.querySelector('#file');
@@ -93,13 +109,16 @@ const store = new Vuex.Store({
             })
               .then(response => {
                 console.log(response)
+                loadWindowState = false;
               })
               .catch(error => {
                 console.log(error.response)
+                loadWindowState = false;
               })
           },
 
         getUser({commit}, login){
+            commit("setCurrentUserPage", null);
             axios.get(serverUrl + '/api/Account/get/login',{
                 params: {login}
             })
@@ -125,7 +144,7 @@ const store = new Vuex.Store({
         
         getMyData({commit, getters}){
             
-            
+            commit("setCurrentUserPage", null);
             var email = localStorage.getItem("username");
             var token = localStorage.getItem("tokenKey");
             var params = new URLSearchParams();
@@ -246,8 +265,16 @@ const store = new Vuex.Store({
             if(state.authenticated == false)
                 return false;
             return state.user.Login === login;
+        },
+
+        showPlayer(state){
+            return state.showPlayer;
+        },
+
+        getCurrentSound(state){
+            return state.currentTrack;
         }
     }
-    })
+})
 
 export default store
