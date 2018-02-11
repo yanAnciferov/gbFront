@@ -13,6 +13,7 @@ import store from "../store/index.js"
 
 
 Vue.use(Router)
+
 export default new Router({
   hashbang: false,
   mode: "history",

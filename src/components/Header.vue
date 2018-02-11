@@ -2,7 +2,7 @@
   <header>
       <div>
          <router-link 
-           v-if="$store.state.authenticated == true" 
+           v-if="$store.getters.isAuthenticated == true" 
            class="button" 
            :to="getMyLogin"
          >Моя страница</router-link>
@@ -11,15 +11,15 @@
            to="/allUser"
           > Поиск</router-link>
            <router-link
-           v-if="$store.state.authenticated == true"
+           v-if="$store.getters.isAuthenticated == true"
            class="button"
            to="/settings"
           > Настройки</router-link>
       </div>
       <div class="login">
-            <router-link v-if="$store.state.authenticated == false" class="button" to="/login">Войти</router-link>
-            <router-link v-if="$store.state.authenticated == false" class="button" to="/registration">Регистрация</router-link>
-            <button v-if="$store.state.authenticated == true" @click="logOf()" class="button">Выход</button>
+            <router-link v-if="$store.getters.isAuthenticated == false" class="button" to="/login">Войти</router-link>
+            <router-link v-if="$store.getters.isAuthenticated == false" class="button" to="/registration">Регистрация</router-link>
+            <button v-if="$store.getters.isAuthenticated == true" @click="logOf()" class="button">Выход</button>
       </div>
   </header>
 </template>

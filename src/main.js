@@ -6,12 +6,17 @@ import { sync } from 'vuex-router-sync'
 import router from './router'
 import store from './store/index'
 import vuescroll from 'vue-scroll'
+import multiLanguage from 'vue-multilanguage/src/vue-multilanguage.js'
+
+import language from './lang/language'
  
-Vue.use(vuescroll)
+
+Vue.use(multiLanguage, language);
+
 Vue.config.productionTip = false
-/* eslint-disable no-new */
 
 sync(store, router);
+
 
 new Vue({
   el: '#app',

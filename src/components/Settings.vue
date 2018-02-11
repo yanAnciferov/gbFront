@@ -8,7 +8,7 @@
 
         <input id="file" type="file" @change="processFile">
 
-        <input v-if="imageUrl" type=button value=Upload @click="uploadFiles">
+        <input v-if="imageUrl" type=button value=Upload @click="uploadAvatar">
 
         </form>
      </div>
@@ -60,7 +60,7 @@ export default {
   }, 
    methods:{
         
-    ...mapActions(["uploadFiles"]),
+    ...mapActions(["uploadAvatar"]),
     processFile(event) {
         this.loadImage = event.target.files[0];
         var imageName = this.loadImage.name;
