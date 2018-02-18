@@ -5,21 +5,31 @@
            v-if="$store.getters.isAuthenticated == true" 
            class="button" 
            :to="getMyLogin"
-         >Моя страница</router-link>
+           v-lang.header.myPage
+         ></router-link>
          <router-link
            class="button"
            to="/allUser"
-          > Поиск</router-link>
+            v-lang.header.search
+          ></router-link>
            <router-link
            v-if="$store.getters.isAuthenticated == true"
            class="button"
            to="/settings"
-          > Настройки</router-link>
+            v-lang.header.settings
+          ></router-link>
+          <select v-model="language"  @change="selectChanged">
+            <option value="en" >English</option>
+            <option value="ru">Русский</option>
+          </select>
       </div>
       <div class="login">
-            <router-link v-if="$store.getters.isAuthenticated == false" class="button" to="/login">Войти</router-link>
-            <router-link v-if="$store.getters.isAuthenticated == false" class="button" to="/registration">Регистрация</router-link>
-            <button v-if="$store.getters.isAuthenticated == true" @click="logOf()" class="button">Выход</button>
+            <router-link 
+            v-if="$store.getters.isAuthenticated == false" 
+            class="button" to="/login"
+             v-lang.header.login ></router-link>
+            <router-link v-if="$store.getters.isAuthenticated == false" class="button" to="/registration"  v-lang.header.registration></router-link>
+            <button v-if="$store.getters.isAuthenticated == true" @click="logOf()" class="button"  v-lang.header.logout></button>
       </div>
   </header>
 </template>
@@ -30,11 +40,14 @@ export default {
   name: 'Header',
   data () {
      return {
-      
+       lang: this.language
     }
   },
   methods:{
-      ...mapActions(["logOf"]) 
+      ...mapActions(["logOf"]),
+      selectChanged(){
+       this.$store.commit("setLanguage", this.language)
+      }
   },
   computed:{
     ...mapGetters(["getMyLogin"]),

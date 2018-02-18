@@ -2,8 +2,10 @@
   <div id="app">
     <Loader class="loader" v-if="$store.getters.isShowFullScreenLoader == true"/>
     <Header class="header"/>
-    <Player class="player"/>
-    <router-view v-if="$store.getters.isShowFullScreenLoader == false" />
+    <Player v-if="$store.getters.showPlayer" class="player"/>
+     <main>
+       <router-view v-if="$store.getters.isShowFullScreenLoader == false" />
+     </main>
     <Footer  class="footer"/>
   </div>
 </template>
@@ -13,7 +15,7 @@
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Loader from '@/components/Loader'
-import Player from '@/components/Player'
+import Player from '@/components/audio/Player'
 import LoadWindow from '@/components/LoadWindow'
 
 import {mapActions} from "vuex"
@@ -34,6 +36,7 @@ export default {
     }
   },
   beforeCreate(){
+    this.language = this.$store.getters.getLanguage;
        if(localStorage.getItem("tokenKey") !== null){
          this.$store.dispatch("getMyData");
        }else{
@@ -86,5 +89,10 @@ body, html{
   left: 0;
   z-index: 1;
   box-shadow: -1px 3px 10px black;
+}
+
+main{
+  max-width: 1000px;
+  margin: 0 auto;
 }
 </style>

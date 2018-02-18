@@ -1,5 +1,6 @@
 import axios from "axios"
 import router from '@/router/index'
+import Vue from 'Vue'
 
 var serverUrl = "http://localhost:65266";
 
@@ -11,14 +12,15 @@ const state = {
 
 const mutations = {
  
+    setLanguage({state}, newLang){
+        localStorage.setItem("lang", newLang);
+    },
+
    setAllUserList(state, allUsers){
    
         state.allUsersList = allUsers
         .map(element => {
-            if(element.AvatarImage != null){
-                element.AvatarImage = serverUrl + element.AvatarImage;
-            } else element.AvatarImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvwpWlQPbOy0hMDI5-jJ8iyIXhBT_hZEKD7SkK3JdggKQDk3okQ";
-  
+            element.AvatarImage = serverUrl + element.AvatarImage;
             return element;
         });
    
@@ -29,11 +31,9 @@ const mutations = {
         state.currentUserPage = null
         return;
     }
-    if(currentUser.AvatarImage != null)
-        currentUser.AvatarImage = serverUrl + currentUser.AvatarImage;
-    else currentUser.AvatarImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvwpWlQPbOy0hMDI5-jJ8iyIXhBT_hZEKD7SkK3JdggKQDk3okQ";
-    state.currentUserPage = currentUser;
 
+    currentUser.AvatarImage = serverUrl + currentUser.AvatarImage;
+    state.currentUserPage = currentUser;
    }
 }
 
@@ -71,6 +71,9 @@ const getters = {
     getCurrentPageUser(state) {
         return state.currentUserPage;
     },
+    getLanguage(){
+        return localStorage.getItem("lang");
+    }
 
 }
 

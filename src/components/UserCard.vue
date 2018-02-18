@@ -18,7 +18,7 @@
 import {mapActions} from "vuex"
 export default {
   name: 'userCard',
-  props:["user"] ,
+  props:["user"],
   data () {
     return {
      

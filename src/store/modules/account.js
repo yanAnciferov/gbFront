@@ -67,11 +67,10 @@ const actions = {
         var params = new URLSearchParams();
         params.append( "email", email);
         axios.get(serverUrl + '/api/Account/get/email',{
-            params:{"email": email},
-            headers:{
-                
-                "Authorization": "Bearer " + token
-            }
+            params,
+            // headers:{
+            //     "Authorization": "Bearer " + token
+            // }
         })
         .then((res)=>{
 

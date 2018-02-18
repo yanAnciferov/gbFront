@@ -1,9 +1,8 @@
 <template>
   <div class="loader-screen">
-    <div>Loading</div>
+    <div v-lang.loader.title></div>
   </div>
 </template>
-
 <script>
 
 

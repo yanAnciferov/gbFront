@@ -3,5 +3,8 @@ import footer from './footer'
 
 export default {
     header,
-    footer
+    footer,
+    loader:{
+        title: "Loading"
+    }
 }

@@ -6,11 +6,15 @@ import { sync } from 'vuex-router-sync'
 import router from './router'
 import store from './store/index'
 import vuescroll from 'vue-scroll'
-import multiLanguage from 'vue-multilanguage/src/vue-multilanguage.js'
+
+import multiLanguage from 'vue-multilanguage/src/vue-multilanguage.js' 
+import VueHowler from 'vue-howler'
+
 
 import language from './lang/language'
  
 
+Vue.use(VueHowler);
 Vue.use(multiLanguage, language);
 
 Vue.config.productionTip = false

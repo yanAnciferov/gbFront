@@ -1,5 +1,8 @@
 export default {
 	myPage: 'My page',
-	seatch: 'Search',
-	settings: 'Settings'
+	search: 'Search',
+	settings: 'Settings',
+	logout: "Exit",
+	login: "Login",
+	registration: "Registration"
 }

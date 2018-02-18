@@ -1,15 +1,18 @@
 <template>
  <div v-if="user != null" class="wrap">
-     <userInfo :user="user" />
+     <div class="content-wrapper">
+        <userInfo :user="user" />
+        <testAudio class="audioPanel" :isMyPage="isMyPage" :user="user"/>
+     </div>
      <h2 v-if="isMyPage">Это ваша страница</h2>
  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mapActions } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
 
 import userInfo from "@/components/UserInfo"
+import testAudio from "@/components/audio/TestAudioControl"
 
 export default {
   name: 'UserPage',
@@ -19,7 +22,8 @@ export default {
     }
   },
   components: {
-      userInfo
+      userInfo,
+      testAudio
   },
   methods:{
       ...mapActions(["getUser", "getMyData",]),
@@ -38,7 +42,6 @@ export default {
       
   },
   created: function(){
-   
     this.isMyPage = this.isAuth && this.$route.params["login"] == this.myLogin;
 
     if(this.isMyPage){
@@ -71,5 +74,15 @@ export default {
 
 .image-wrapper img{
     max-width: 100%;
+}
+
+.content-wrapper{
+    display: flex;
+}
+
+.audioPanel{
+    
+    flex-grow: 1;
+    margin-left: 2em;
 }
 </style>
