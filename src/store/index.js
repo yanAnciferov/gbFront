@@ -6,6 +6,8 @@ import player from './modules/player'
 import account from './modules/account'
 import common from './modules/public'
 import audio from './modules/audio'
+import categories from './modules/categories'
+import search from './modules/search'
 
 Vue.use(Vuex);
 
@@ -18,7 +20,9 @@ const store = new Vuex.Store({
         loadScreen,
         player,
         account,
-        audio
+        audio,
+        categories,
+        search
       }
 })
 

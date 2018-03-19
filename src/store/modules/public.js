@@ -44,7 +44,8 @@ const actions = {
             params: {login}
         })
         .then((res)=>{
-            commit("setCurrentUserPage", res.data)
+            commit("setCurrentUserPage", res.data);
+            commit("setUserCategory", res.data.Categories);
         }).catch((err)=>{
             console.log(err);
             router.replace("/404");

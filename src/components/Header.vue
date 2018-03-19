@@ -4,7 +4,7 @@
          
          <router-link
            class="button"
-           to="/allUser"
+           to="/Search"
             v-lang.header.search
           ></router-link>
            

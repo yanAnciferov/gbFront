@@ -9,7 +9,9 @@
             <button class="button" @click="close()">X</button>
             <h2>Добавление новой категории</h2>
             <ul>
-                <li :class="{selected: selectedItems.indexOf(item) != -1}" @click="liClick(item)" v-for="(item, index) in categories" :key='index'>
+                <li :class="{selected: selectedItems.indexOf(item) != -1}"
+                 @click="liClick(item)" 
+                 v-for="(item, index) in categories" :key='index'>
                     {{item.Name}}
                 </li>
             </ul>

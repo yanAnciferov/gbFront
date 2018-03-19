@@ -3,9 +3,9 @@
         <div class="header-play-list">
             <div class="category">
                 <img src="http://icons.iconarchive.com/icons/flat-icons.com/flat/512/Guitar-icon.png" alt="category-image">
-                <span>Гитара</span>
+                <span>{{category.Name}}</span>
             </div>
-            <div class="controlls">
+            <div  v-if="isMyPage" class="controlls">
                 <button>Add</button>
             </div>
         </div>
@@ -25,6 +25,7 @@ import testAudio from "@/components/audio/TestAudioControl"
 
 export default {
   name: 'PlayList',
+  props: ['category','isMyPage'],
   data () {
     return {
         

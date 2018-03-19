@@ -2,10 +2,10 @@
  <div class="wrap">
     <h2>Страница поиска</h2>
     <div class="seach-panel">
-      <input type="text">
+      <input type="text" v-model="searchModel.FullName"> <button @click='start'>найти</button>
     </div>
      <div class="all-user-wrapper">
-       <UserCard class="card" :user="item" v-for="(item,index) in listUsers" :key='index'/>
+       <UserCard class="card" :user="item" v-for="(item,index) in result" :key='index'/>
      </div>
  </div>
 </template>
@@ -27,14 +27,18 @@ export default {
     }
   }, 
   methods:{
-      ...mapActions(["search"])
+      start(){
+        this.$store.dispatch("search");
+      }
   },
   created: function(){
       this.$store.dispatch("getAllUsers");
   },
   computed:{
       ...mapGetters({
-        listUsers: "getAllUsersList"
+        listUsers: "getAllUsersList",
+        searchModel: "getSearchModel",
+        result: "getSearchResult"
       })
   },
  

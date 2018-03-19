@@ -29,7 +29,7 @@ export default {
   .wrap{
     box-shadow: 0px 2px 4px #888;
     padding: 1em;
-    max-width: 15em;
+    max-width: 100%;
     background-color: white;
   }
 

@@ -1,13 +1,13 @@
 <template>
  <div v-if="user != null" class="wrap">
      <div class="content-wrapper">
-        <userInfo :user="user" />
-        <testAudio class="audioPanel" :isMyPage="isMyPage" :user="user"/>
+        <userInfo class="user-info" :user="user" />
+        <!-- <testAudio class="audioPanel" :isMyPage="isMyPage" :user="user"/> -->
      </div>
      <h2 v-if="isMyPage">Это ваша страница</h2>
      <div class="play-lists-wrapper">
-         <!-- <playList class="playList" /> -->
-         <addPlayList class="playList"/>
+         <playList :isMyPage='isMyPage' :category='item' v-for="(item, index) in categories" :key='index' class="playList" />
+         <addPlayList v-if="isMyPage" class="playList"/>
      </div>
  </div>
 </template>
@@ -44,7 +44,8 @@ export default {
         user: "getCurrentPageUser",
         myPage: "isMyPage",
         myLogin: "getMyLogin",
-        isAuth: "isAuthenticated"
+        isAuth: "isAuthenticated",
+        categories: "getUserCategory",
       }),
       
       
@@ -102,5 +103,9 @@ export default {
 
 .playList{
     margin: 1em;
+}
+
+.user-info{
+    width: 100%;
 }
 </style>

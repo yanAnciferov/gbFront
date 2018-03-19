@@ -78,7 +78,8 @@ const actions = {
             commit("setAuthenticatedState", true);
             commit("showFullScreenLoader", false);
             commit("setCurrentUserPage", res.data);
-            console.log(res.data);
+            commit("setUserCategory", res.data.Categories);
+            console.log(res.data.Categories);
             router.push(res.data.Login);
 
         }).catch((err)=>{
@@ -87,6 +88,7 @@ const actions = {
             commit("setUser", null);
             commit("setAuthenticatedState", false);
             commit("showFullScreenLoader", false);
+            commit("setUserCategory", null);
             var email = localStorage.removeItem("username");
             var token = localStorage.removeItem("tokenKey");
 

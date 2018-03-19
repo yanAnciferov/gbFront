@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import RegistrationPage from '@/components/RegistrationPage'
 import LoginPage from '@/components/LoginPage'
 import Im from '@/components/Im'
-import AllUser from '@/components/Search'
+import Search from '@/components/Search'
 import UserPage from '@/components/UserPage'
 import NotFound from '@/components/404.vue'
 import Settings from '@/components/Settings.vue'
@@ -63,9 +63,9 @@ export default new Router({
     //   }
     // },
     {
-      path: '/allUser',
-      name: 'AllUser',
-      component: AllUser
+      path: '/search',
+      name: 'Search',
+      component: Search
     },
     {
       path: '/settings',
