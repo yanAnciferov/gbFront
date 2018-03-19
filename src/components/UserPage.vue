@@ -5,6 +5,10 @@
         <testAudio class="audioPanel" :isMyPage="isMyPage" :user="user"/>
      </div>
      <h2 v-if="isMyPage">Это ваша страница</h2>
+     <div class="play-lists-wrapper">
+         <!-- <playList class="playList" /> -->
+         <addPlayList class="playList"/>
+     </div>
  </div>
 </template>
 
@@ -12,7 +16,9 @@
 import { mapGetters, mapActions } from 'vuex'
 
 import userInfo from "@/components/UserInfo"
+import playList from "@/components/PlayList"
 import testAudio from "@/components/audio/TestAudioControl"
+import addPlayList from "@/components/AddPlayListControl"
 
 export default {
   name: 'UserPage',
@@ -23,7 +29,9 @@ export default {
   },
   components: {
       userInfo,
-      testAudio
+      testAudio,
+      playList,
+      addPlayList
   },
   methods:{
       ...mapActions(["getUser", "getMyData",]),
@@ -84,5 +92,15 @@ export default {
     
     flex-grow: 1;
     margin-left: 2em;
+}
+
+.play-lists-wrapper{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.playList{
+    margin: 1em;
 }
 </style>

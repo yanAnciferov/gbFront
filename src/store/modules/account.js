@@ -68,16 +68,17 @@ const actions = {
         params.append( "email", email);
         axios.get(serverUrl + '/api/Account/get/email',{
             params,
-            // headers:{
-            //     "Authorization": "Bearer " + token
-            // }
+            headers:{
+                "Authorization": "Bearer " + token
+            }
         })
         .then((res)=>{
-
+            console.log(res.data);
             commit("setUser", res.data);
             commit("setAuthenticatedState", true);
             commit("showFullScreenLoader", false);
             commit("setCurrentUserPage", res.data);
+            console.log(res.data);
             router.push(res.data.Login);
 
         }).catch((err)=>{

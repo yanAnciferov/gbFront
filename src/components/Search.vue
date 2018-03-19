@@ -1,6 +1,9 @@
 <template>
  <div class="wrap">
-    <h2>Все пользователи сайта</h2>
+    <h2>Страница поиска</h2>
+    <div class="seach-panel">
+      <input type="text">
+    </div>
      <div class="all-user-wrapper">
        <UserCard class="card" :user="item" v-for="(item,index) in listUsers" :key='index'/>
      </div>
@@ -32,9 +35,7 @@ export default {
   computed:{
       ...mapGetters({
         listUsers: "getAllUsersList"
-      }),
-     
-      
+      })
   },
  
 }

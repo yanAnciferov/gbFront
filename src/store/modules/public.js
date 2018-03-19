@@ -52,7 +52,13 @@ const actions = {
     },
 
     getAllUsers({commit}){
-        axios.get(serverUrl + '/api/Account/getAll')
+        
+        var token = localStorage.getItem("tokenKey");
+        axios.get(serverUrl + '/api/Account/getAll', {
+            headers:{
+                "Authorization": "Bearer " + token
+            }
+        })
         .then((res)=>{
             commit("setAllUserList", res.data);
         }).catch((err)=>{
