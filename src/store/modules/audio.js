@@ -44,19 +44,24 @@ const actions = {
 
     loadAudio ({commit, getters}, model) {
         var s = this;
+
         commit("setLoadState", "loading");
-        const data = new FormData(document.getElementById('uploadForm'));
+
         var audioFile = document.querySelector('#audio');
+
+        const data = new FormData(document.getElementById('uploadForm'));
         data.append('upload', audioFile.files[0]);
+
         var params = new URLSearchParams();
-        console.log(getters.getMyLogin);
         var email = localStorage.getItem("username");
         params.append( "email", email);
+        params.append( "idcat", model.category.Id);
         params.append( "performer", model.performer);
         params.append( "tittle", model.tittle);
         axios.post(serverUrl + '/api/Tracks/Add', data, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + localStorage.getItem("tokenKey")
           },
           params
         })

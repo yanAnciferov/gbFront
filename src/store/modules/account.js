@@ -79,7 +79,7 @@ const actions = {
             commit("showFullScreenLoader", false);
             commit("setCurrentUserPage", res.data);
             commit("setUserCategory", res.data.Categories);
-            console.log(res.data.Categories);
+            console.log(res.data);
             router.push(res.data.Login);
 
         }).catch((err)=>{
@@ -100,12 +100,13 @@ const actions = {
         if(password == confirmPassword){
                 
             var data = {
+                "Cityid": 1,
                 "Firstname": firstname,
                 "Lastname": lastname,
                 "BirthDate": birthdate,                    
                 "Password": password,
                 "ConfirmPassword": confirmPassword,
-                "Email": email,
+                "Email": email
                 
             };
             

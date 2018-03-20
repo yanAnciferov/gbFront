@@ -2,6 +2,15 @@
  <div class="wrap" v-if="user != null">
     <h2>{{user.Lastname}} {{user.Firstname}}</h2>
     <Avatar :image="user.AvatarImage" />
+    <div class="location" v-if="user.City != null">
+      {{user.City.Country.Name}},
+      {{user.City.Name}}
+    </div>
+
+    <div v-if="user.About != null" class="about">
+      <h5>Обо мне</h5>
+      <p>{{user.About}}</p>
+    </div>
  </div>
 </template>
 

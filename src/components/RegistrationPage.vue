@@ -54,6 +54,14 @@
                 <input placeholder="год" type="text" name="year">
             </div> -->
         </div>
+        <div class="form-element">
+             <label>Страна</label>
+            <select>
+                <option value="1">Украина</option>
+                <option value="2">Россия</option>
+                <option value="3">Белорусь</option>
+            </select>
+        </div>
         <div class="submit-wrapper">
             <input  class="submit" type="submit" value="Регестрация">
         </div>
@@ -78,7 +86,7 @@ export default {
             birthdate: "",
             email: "",
             password: "",
-            confirmPassword: "",
+            confirmPassword: ""
         },
         emailValidState: false
     }

@@ -6,7 +6,7 @@
      </div>
      <h2 v-if="isMyPage">Это ваша страница</h2>
      <div class="play-lists-wrapper">
-         <playList :isMyPage='isMyPage' :category='item' v-for="(item, index) in categories" :key='index' class="playList" />
+         <playList :isMyPage='isMyPage' :user='user' :category='item' v-for="(item, index) in categories" :key='index' class="playList" />
          <addPlayList v-if="isMyPage" class="playList"/>
      </div>
  </div>

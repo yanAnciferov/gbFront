@@ -6,43 +6,71 @@
                 <span>{{category.Name}}</span>
             </div>
             <div  v-if="isMyPage" class="controlls">
-                <button>Add</button>
+                <button  @click="addClick()" class="pointer">Add</button>
             </div>
         </div>
         <div class="audio-list">
-            <audio src="" controls></audio>
-            <audio src="" controls></audio>
-            <audio src="" controls></audio>
+            <audio v-for="(item, index) in trackList" :src="item.Url" :key="index" controls></audio>
         </div>
+        <addAudioWindow @close="showWindow = false" v-if="showWindow" :category='category'/>
     </div>
+
+
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+import axios from "axios"
+
+var serverUrl = "http://localhost:65266";
+
 import userInfo from "@/components/UserInfo"
 import testAudio from "@/components/audio/TestAudioControl"
+import addAudioWindow from "@/components/audio/AddAudioWindow"
 
 export default {
   name: 'PlayList',
-  props: ['category','isMyPage'],
+  props: ['category','isMyPage', 'user'],
   data () {
     return {
-        
+        showWindow: false,
+        trackList: []
     }
   },
   components: {
-      
+      addAudioWindow
   },
   methods:{
-     
+     addClick(){
+         this.showWindow = true;
+     }
   },
   computed:{
-     
+     ...mapGetters(["getUser"])
       
   },
   created: function(){
-    
+       var params = new URLSearchParams();
+        params.append( "iduser", this.user.Id);
+        params.append( "categoryid", this.category.Id);
+     axios.post(serverUrl + '/api/Tracks/AudioList', null, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + localStorage.getItem("tokenKey")
+          },
+          params
+        })
+          .then(response => {
+            this.trackList = response.data.map(el => {
+                 el.Url = serverUrl + el.Url
+                 return el
+             })
+            console.log(this.trackList);
+          })
+          .catch(error => {
+            console.log(error.response)
+          })
   },
   beforeRouteUpdate(to, from, next){
     
@@ -51,6 +79,10 @@ export default {
 </script>
 
 <style scoped>
+
+.pointer{
+    cursor: pointer;
+}
 
 .header-play-list{
     display: flex;
@@ -78,5 +110,9 @@ export default {
 .audio-list{
     display: flex;
     flex-direction: column;
+}
+
+.play-list{
+    width: 300px;
 }
 </style>

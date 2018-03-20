@@ -3,7 +3,7 @@
      <div class="window">
          <button v-on:click="$emit('close')" class="close">X</button>
          <div class="content">
-             <h4>Добавление нового аудио</h4>
+             <h4>Добавление нового аудио для {{category.Name}}</h4>
              <form>
                  <p>                 
                     <label for="performer">Исполнитель</label>
@@ -43,10 +43,12 @@ import { mapActions,mapGetters } from "vuex"
 
 export default {
   name: 'addAudioWindow',
+  props: ['category'],
   data () {
       return {
         correctlyAudio: false,
         addAudioFormModel: {
+            category: this.category,
             title: "", 
             performer: "" 
         }
