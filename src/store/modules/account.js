@@ -1,7 +1,7 @@
 import axios from "axios"
 import router from '@/router/index'
 
-var serverUrl = "http://localhost:65266";
+var serverUrl = "https://skitel.azurewebsites.net";
 
 const state = {
     user: null,
@@ -24,16 +24,18 @@ const actions = {
 
     uploadAvatar ({commit, getters}) {
         var s = this
-        const data = new FormData(document.getElementById('uploadForm'));
+
         var imagefile = document.querySelector('#file');
+        const data = new FormData();
         data.append('upload', imagefile.files[0]);
+
         var params = new URLSearchParams();
-        console.log(getters.getMyLogin);
         var email = localStorage.getItem("username");
-        params.append( "email", email);
+        params.append("email", email);
         axios.post(serverUrl + '/api/Account/setAvatar', data, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + localStorage.getItem("tokenKey")
           },
           params
         })

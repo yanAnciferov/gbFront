@@ -2,7 +2,7 @@ import axios from "axios"
 import router from '@/router/index'
 import Vue from 'Vue'
 
-var serverUrl = "http://localhost:65266";
+var serverUrl = "https://skitel.azurewebsites.net";
 
 
 const state = {
@@ -18,11 +18,7 @@ const mutations = {
 
    setAllUserList(state, allUsers){
    
-        state.allUsersList = allUsers
-        .map(element => {
-            element.AvatarImage = serverUrl + element.AvatarImage;
-            return element;
-        });
+        state.allUsersList = allUsers;
    
    },
 
@@ -32,7 +28,7 @@ const mutations = {
         return;
     }
 
-    currentUser.AvatarImage = serverUrl + currentUser.AvatarImage;
+
     state.currentUserPage = currentUser;
    }
 }

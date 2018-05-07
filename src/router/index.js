@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Start from '@/components/pages/start'
+import HelloWorld from '@/components/pages/categories'
+import Result from '@/components/pages/result'
 import RegistrationPage from '@/components/RegistrationPage'
 import LoginPage from '@/components/LoginPage'
 import Im from '@/components/Im'
@@ -20,8 +22,18 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Start',
+      component: Start
+    },
+    {
+      path: '/categories',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/result',
+      name: 'res',
+      component: Result
     },
     {
       path: '/registration',

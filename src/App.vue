@@ -1,14 +1,15 @@
 <template>
   <div id="app">
-    <Loader class="loader" v-if="$store.getters.isShowFullScreenLoader == true"/>
     <Header class="header"/>
-    <Player v-if="$store.getters.showPlayer" class="player"/>
-     <main>
-       <router-view v-if="$store.getters.isShowFullScreenLoader == false" />
-     </main>
-    <Footer  class="footer"/>
+    <LeftMenu class="menu"/>
+     <transition :name="transitionName">
+       <router-view class="router"/>
+     </transition>
+    <Loader v-if="loaded" class="load"/>
   </div>
 </template>
+
+
 
 <script>
 
@@ -17,6 +18,7 @@ import Footer from '@/components/Footer'
 import Loader from '@/components/Loader'
 import Player from '@/components/audio/Player'
 import LoadWindow from '@/components/LoadWindow'
+import LeftMenu from '@/components/leftMenu'
 
 import {mapActions} from "vuex"
 
@@ -24,75 +26,122 @@ export default {
   name: 'App',
   components: {
     Header,
-    Footer,
+    // Footer,
+    // Loader,
+    // Player,
     Loader,
-    Player,
-    LoadWindow
+    LeftMenu
+  }, 
+ data(){
+    return{
+      transitionName: '',
+      start: true,
+      loaded: true
+    }
   },
   methods:{
-    onScroll(){
-      console.dir(footer);
+    // onScroll(){
+    //   console.dir(footer);
 
-    }
+    // }
   },
   beforeCreate(){
-    this.language = this.$store.getters.getLanguage;
-       if(localStorage.getItem("tokenKey") !== null){
-         this.$store.dispatch("getMyData");
-       }else{
-         this.$store.commit("showFullScreenLoader", false);
+    // this.language = this.$store.getters.getLanguage;
+        if(localStorage.getItem("tokenKey") !== null){
+          this.$store.dispatch("getMyData");
+        }
+        // else{
+        //   this.$store.commit("showFullScreenLoader", false);
+        // }
+      this.$store.dispatch('getCategories');
+      this.$store.dispatch('loadCountries');
+      setTimeout(() => {this.loaded = false}, 2000)
+
+    },watch: {
+       '$route' (to, from) {
+         const toDepth = to.path.split('/').slice(-1)[0]
+         const fromDepth = from.path.split('/').slice(-1)[0]
+         console.log(fromDepth)
+          if(toDepth == '')
+            this.start = true;
+          else this.start = false;
+
+        //  if(fromDepth == "categories" && toDepth == "result")
+        //    this.transitionName = 'slide-left'
+        //     else if(fromDepth == "")
+        //   this.transitionName = 'slide-left'
+        //    else if(toDepth == "")
+        //   this.transitionName = 'slide-right'
+        //   else if(toDepth == "result" || toDepth == "categories")
+        //     this.transitionName = 'slide-right'
        }
-    }
+     }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  padding: 0 2em;
-  padding-top: 4em;
-  padding-bottom: 6em;
-  color: #2c3e50;
-  min-height: calc(100vh - 10em);
-  position: relative;
-  background-color: #fefefe;
+<style >
 
-}
-
-body, html{
+html, body, #app{
+  min-height: 100vh;
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
 }
 
-.loader{
+.slide-left-leave-active,
+.slide-left-enter-active {
+  transition: .5s;
+}
+.slide-left-enter {
+  transform: translate(100%, 0);
+}
+.slide-left-leave-to {
+  transform: translate(-100%, 0);
+}
+
+
+.slide-right-leave-active,
+.slide-right-enter-active {
+  transition: .5s;
+}
+.slide-right-enter {
+  transform: translate(-100%, 0);
+}
+.slide-right-leave-to {
+  transform: translate(100%, 0);
+}
+
+.menu, .header{
+  z-index: 5;
+}
+
+ .header{
+   top: 1;
+ }
+
+.load{
   z-index: 999;
 }
 
 
-.header{
-  position: fixed;
-  top: 0;
-  left: 0;
+
+*::-webkit-scrollbar-track
+{
+    background-color: #F5F5F5;
+    
 }
 
-.footer{
-  position: absolute;
-  bottom: 0;
-  left: 0;
+*::-webkit-scrollbar
+{
+	width: 10px;
+    background-color: #F5F5F5;
+    
 }
 
-.player{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-  box-shadow: -1px 3px 10px black;
-}
-
-main{
-  max-width: 1000px;
-  margin: 0 auto;
+*::-webkit-scrollbar-thumb
+{
+	background-color: #555555;
+    border: 2px solid #555555;
+   
 }
 </style>

@@ -1,12 +1,13 @@
 import axios from "axios"
 import router from '@/router/index'
 
-var serverUrl = "http://localhost:65266";
+var serverUrl = "https://skitel.azurewebsites.net";
 
 
 const state = {
    categoriesList: [],
-   userCategory: []
+   userCategory: [],
+   selectedCategories: []
 }
 
 const mutations = {
@@ -16,7 +17,17 @@ const mutations = {
 
     setUserCategory(state, list){
         state.userCategory = list
+    },
+
+    toggleCategory(state, selectedCategory){
+        var index = state.selectedCategories.indexOf(selectedCategory);
+        if (index > -1) {
+            state.selectedCategories.splice(index, 1);
+        }else{
+            state.selectedCategories.push(selectedCategory);
+        }
     }
+   
 }
 
 const actions = {
@@ -107,6 +118,9 @@ const getters = {
     },
     getUserCategory(state){
         return state.userCategory;
+    },
+    getSelectedCategories(state){
+        return state.selectedCategories;
     }
 }
 

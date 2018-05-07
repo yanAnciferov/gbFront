@@ -1,44 +1,56 @@
 <template>
-  <header>
-      <div>
-         
-         <router-link
-           class="button"
-           to="/Search"
-            v-lang.header.search
-          ></router-link>
-           
-          <select v-model="language"  @change="selectChanged">
-            <option value="en" >English</option>
-            <option value="ru">Русский</option>
-          </select>
-      </div>
- 
-     
-      <div class="login">
-            <router-link 
-            v-if="$store.getters.isAuthenticated == false" 
-            class="button" to="/login"
-             v-lang.header.login ></router-link>
-            <router-link v-if="$store.getters.isAuthenticated == false" class="button" to="/registration"  v-lang.header.registration></router-link>
-                 <div class="account-menu" v-if="$store.getters.isAuthenticated == true">
-                    <div  v-on:click="menuVisible = !menuVisible">
-                        <img class="account-menu-avatar" :src="getUser.AvatarImage" alt="avatar">
+  <header class="header">
+        <div class='left-s'>
+            <img class="logo" src="@/assets/logo-02.svg" alt="">
+        </div>
+
+        <div class='right-s'>
+            <div class="selectedCategories">
+                <div class="selectedCategory" @click="catClick(item)"
+                 v-for="(item, index) in getSelectedCategories" :key='index'>
+                    <img :src="item.ImageUrl" :alt="item.Name">
+                </div>
+            </div>
+
+            <div class="geolocation" @click="geoPick = true">
+                <div class="selectCountry" @click="countryWin = true; cityWin = false">
+                    <span v-if="getSelectedCountry != null">
+                        {{getSelectedCountry.Name}},
+                    </span>
+                    <span v-else>Страна, </span>
+                    <span v-if="getSelectedCity != null">
+                        {{getSelectedCity.Name}}
+                    </span>
+                    <span v-else>Город</span>
+                </div>
+            </div>
+
+            <div class="window" v-if="geoPick">
+                <div class="window-geo" v-if='countryWin'>
+                    <div class="location-wrapper">
+                        <ul>
+                            <li @click="countryClick(item)" 
+                                v-for="(item, index) in getCountryList" :key='index'
+                                :class="{ active: item.isSelected }"
+                            >
+                                {{item.Name}}
+                            </li>
+                        </ul>
+                        <ul>
+                            <li @click="cityClick(item)"
+                                 v-for="(item, index) in getCityList" :key='index'
+                                 :class="{ active: item.isSelected }">
+                                {{item.Name}}
+                            </li>
+                        </ul>
                     </div>
-                    <div v-if="menuVisible" class="closeMenu" @click="menuVisible = false"></div>
-                    <div class="menu" v-if="menuVisible" >
-                      <div class="menu-button-wrapper">
-                        <button @click="menuVisible = false; goHome()" class="button"  v-lang.header.myPage></button>
-                      </div>
-                        <div class="menu-button-wrapper">
-                        <button @click="menuVisible = false; settings()" class="button"  v-lang.header.settings></button>
-                      </div>
-                      <div class="menu-button-wrapper">
-                        <button @click="menuVisible = false; logOf()" class="button"  v-lang.header.logout></button>
-                      </div>
-                    </div>
-                  </div>
-      </div>
+                </div>
+                <div class="window-geo" v-if='cityWin'>
+                    
+                </div>
+                <div class="geo-bg" @click="geoPick = false; countryWin = false; cityWin = false"></div>
+            </div>
+        </div>
   </header>
 </template>
 
@@ -49,7 +61,10 @@ export default {
   data () {
      return {
        lang: this.language,
-       menuVisible: false
+       menuVisible: false,
+       geoPick: false,
+       cityWin: false,
+       countryWin: false
     }
   },
   methods:{
@@ -62,12 +77,47 @@ export default {
       },
       settings(){
         this.$router.push("settings");
+      },
+      catClick(cat){
+        this.$store.commit('toggleCategory', cat);
+        this.$store.dispatch('search');
+      },
+      countryClick(country){
+           this.$store.dispatch('changeCountry', country),
+           this.$store.commit('setCountry', country)
+      },
+      cityClick(city){
+           this.$store.dispatch('setCity', city)
       }
   },
   computed:{
-    ...mapGetters(["getMyLogin", "getUser"]),
+    ...mapGetters([
+        "getMyLogin", 
+        "getUser", 
+        'getSelectedCategories',
+        'getCountryList',
+        'getCityList',
+        'getSelectedCity',
+        'getSelectedCountry'
+        ]),
     getUrl(){
       return "/" + this.getMyLogin;
+    },
+    
+  },
+  watch: {
+      isSelectedCity(City){
+        if(City == null || this.getSelectedCity)
+            return false;
+        else{
+            return City.Id == this.getSelectedCity.Id
+        }
+    }, isSelectedCountry(Country){
+        if(Country == null || this.getSelectedCountry)
+            return false;
+        else{
+            return Country.Id == this.getSelectedCountry.Id
+        }
     }
   }
  
@@ -76,80 +126,164 @@ export default {
 
 
 <style scoped>
-header{
+
+
+
+@font-face {
+    font-family: LifelsRU; /* Имя шрифта */
+    src: url('../fonts/LifeIsStrangeRU.ttf'); /* Путь к файлу со шрифтом */
+}
+
+@font-face {
+    font-family: slimamif; /* Имя шрифта */
+    src: url('../fonts/slimamif.ttf'); /* Путь к файлу со шрифтом */
+}
+
+
+
+.active{
+    
+}
+
+.location-wrapper{
     display: flex;
+}
+
+li{
+    list-style: none;
+    padding: 10px;
+    cursor: pointer;
     box-sizing: border-box;
-    justify-content: space-between;
-    padding: 1em;
-    width: 100%;
-    box-shadow: black 0px 0px 10px;
-    background-color: #333;
+    color:#5B4069;
+    font-family: LifelsRU;
+    font-weight: bold;
 }
 
-.button{
-  margin: 0 1em;
-  border: none;
-  background-color: transparent;
-  color: #aaa;
-  text-transform: none;
-  text-decoration: none;
-  cursor: pointer;
-  outline: none;
+li:hover{
+    background-color: beige;
 }
 
-.button:hover{
-  color: white;
-}
-
-.login > .button{
-  margin: 0 .5em;
-}
-
-.account-menu{
-  border-radius: 50%;
-  overflow: hidden;
-  width: 32px;
-  height: 32px;
-  margin-right: 3em;
-}
-
-.account-menu > div{
-}
-
-.account-menu-avatar{
-  width: 100%;
-  cursor: pointer;
-}
-
-.menu{
-  position: absolute;
-  right: 3em;
-  background-color: #fff;
-  border: 1px solid #555;
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px #333;
-  width: 7em;
-  padding: 5px 0;
-}
-
-.menu-button-wrapper > button{
-    color: #333;
-    width: 100%;
+ul{
+    widows: 100px;
+    padding: 0;
     margin: 0;
-    padding: 5px;
 }
 
-.menu-button-wrapper > button:hover{
-    background-color: #555;
+.geo-bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #333333cc;
+    z-index: 15;
+    
+}
+
+.window-geo{
+    position: absolute;
+    width: 12em;
+    top: 4em;
+    right: 2em;
+    background-color: #fff;
+    border-radius: .4em;
+    z-index: 16;
+
+}
+
+.header{
+    box-sizing: border-box;
+   
+    background-color: transparent;
+    width: 100vw;
+    padding: 0 2em;
+    
+    padding-top: .6em;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.selectedCategory{
+    width: 3em;
+    margin: 0 .5em;
+    cursor: pointer;
+}
+
+.selectedCategory img{
+    width: 100%;
+}
+
+.geolocation{
+    display: flex;
+    z-index: 16;
+    cursor: pointer;
+}
+
+
+
+.selectCity:hover, .selectCountry:hover{
+    text-decoration: underline;
     color: white;
 }
 
-.closeMenu{
-  background-color: transparent;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
+.selectedCategories{
+    display: flex;
 }
+
+
+.right-s{
+    display: flex;
+    align-items: center;
+}
+
+.left-s{
+    display: flex;
+    align-items: center;
+}
+
+.search-panel{
+    margin-left: 2em;
+}
+
+.search-panel input{
+    background-color: #cccccccc;
+    padding: .5em 1em;
+    border: none;
+    outline: none;
+    width: 20em;
+    border-radius: 15px;
+}
+.logo{
+    height: 4em;
+}
+
+.geolocation{
+    font-family: LifelsRU;
+}
+
+
+.selectCity, .selectCountry{
+    color:#5B4069;
+    font-size: 1.5em;
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+.selectedCategory{
+    width: 3em;
+    margin: 0 .5em;
+}
+
+.geolocation{
+    display: flex;
+}
+
+
+.selectedCategories{
+    display: flex;
+}
+
 </style>

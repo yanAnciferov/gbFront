@@ -5,8 +5,8 @@
     v-bind:class="{'image-wrapper': true, 'playing': audio.IsPlaying, 'paused': !audio.IsPlaying }" 
     v-on:click="onPlay">
         <img :src="audio.ImageCover" alt="Image Cover">
-        <img src="@/assets/pause.svg" class="pause " alt="pause">
-        <img src="@/assets/play.svg" class="play" alt="play">
+        <!-- <img src="@/assets/pause.svg" class="pause " alt="pause">
+        <img src="@/assets/play.svg" class="play" alt="play"> -->
     </div>
     <div class="audio-content-wrapper">
       <div class="player-wrapper">

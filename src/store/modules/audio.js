@@ -1,7 +1,7 @@
 import axios from "axios"
 import router from '@/router/index'
 
-var serverUrl = "http://localhost:65266";
+var serverUrl = "https://skitel.azurewebsites.net";
 
 
 const state = {
@@ -45,19 +45,19 @@ const actions = {
     loadAudio ({commit, getters}, model) {
         var s = this;
 
-        commit("setLoadState", "loading");
-
-        var audioFile = document.querySelector('#audio');
-
+        var audioFile = document.querySelector('#file');
+        
         const data = new FormData(document.getElementById('uploadForm'));
+       
         data.append('upload', audioFile.files[0]);
-
+    
         var params = new URLSearchParams();
         var email = localStorage.getItem("username");
         params.append( "email", email);
         params.append( "idcat", model.category.Id);
         params.append( "performer", model.performer);
         params.append( "tittle", model.tittle);
+        
         axios.post(serverUrl + '/api/Tracks/Add', data, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -66,10 +66,12 @@ const actions = {
           params
         })
           .then(response => {
+            model.callback('Загрузка прошла успешно!');
             console.log(response)
           })
           .catch(error => {
-            console.log(error.response)
+            console.log(error.response);
+            model.callback('При загрузке произошла ошибка!');
           })
       },
 

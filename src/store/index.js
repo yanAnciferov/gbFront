@@ -8,6 +8,7 @@ import common from './modules/public'
 import audio from './modules/audio'
 import categories from './modules/categories'
 import search from './modules/search'
+import social from './modules/social'
 
 Vue.use(Vuex);
 
@@ -22,7 +23,8 @@ const store = new Vuex.Store({
         account,
         audio,
         categories,
-        search
+        search,
+        social
       }
 })
 
