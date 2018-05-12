@@ -64,6 +64,9 @@ const actions = {
         });
         if(model.City != null)
             params.append("cityid", model.City.Id)
+        if(model.FullName != null)
+        params.append("fullname", model.FullName)
+        
         axios.post(serverUrl + '/api/Account/Searcher', null, {
           headers: {
             'Content-Type': 'multipart/form-data'

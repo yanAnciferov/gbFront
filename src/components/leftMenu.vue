@@ -2,32 +2,33 @@
     <div class="left-menu-wrapper">
        
         <div class="left-menu">
-             <div class="bg">
+             <!-- <div class="bg">
                  <img src="@/assets/profil.png" alt="bg">
-            </div>
+            </div> -->
             <div class="home" v-if="auth">
                 <router-link :to="login">
-                    <img src="@/assets/home.png" alt="">
+                    <img src="@/assets/leftMenu/home.svg" alt="">
                 </router-link>
             </div>
             <div class="search">
                 <router-link to="/categories">
-                    <img src="@/assets/search.svg" alt="">
+                    <img src="@/assets/leftMenu/search.svg" alt="">
+                </router-link>
+            </div>
+             <div class="setting" v-if="auth">
+                <router-link to="/settings">
+                    <img src="@/assets/leftMenu/settings.svg" alt="">
                 </router-link>
             </div>
             <div class="exit" v-if="auth" @click='logOf()'>
-                <img src="@/assets/exit.svg" alt="">
+                <img src="@/assets/leftMenu/enter.svg" alt="">
             </div>
             <div class="login" v-if="!auth">
                 <router-link to="/login">
                     <img src="@/assets/exit.svg" alt="">
                 </router-link>
             </div>
-             <div class="setting" v-if="auth">
-                <router-link to="/settings">
-                    <img src="@/assets/exit.svg" alt="">
-                </router-link>
-            </div>
+            
         </div>
     </div>
  </template>
@@ -86,6 +87,12 @@ export default {
     align-items: center;
 }
 
+.exit{
+    cursor: pointer;
+}
+
+
+
 .left-menu img{
     width: 100%;
 }
@@ -100,6 +107,7 @@ export default {
     left: 0;
     height: 100vh;
     padding-top: 10em;
+    z-index: 105;
 
 }
 </style>

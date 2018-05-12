@@ -61,7 +61,7 @@ const actions = {
         })
     },
 
-    getMyData({commit, getters}){
+    getMyData({commit, getters}, isLogin){
             
         commit("setCurrentUserPage", null);
         var email = localStorage.getItem("username");
@@ -82,7 +82,8 @@ const actions = {
             commit("setCurrentUserPage", res.data);
             commit("setUserCategory", res.data.Categories);
             console.log(res.data);
-            router.push(res.data.Login);
+            if(isLogin == true)
+                router.push(res.data.Login);
 
         }).catch((err)=>{
             
@@ -128,13 +129,13 @@ const actions = {
         }
     },
 
-    getToken({commit, dispatch }, {email, password}){
+    getToken({commit, dispatch }, model){
         
 
         var params = new URLSearchParams();
         params.append( "grant_type", 'password');
-        params.append( "Username", email);
-        params.append( "Password", password);
+        params.append( "Username", model.email);
+        params.append( "Password", model.password);
         
         axios({
                 method: 'post',
@@ -147,11 +148,13 @@ const actions = {
          
             console.log(res);
             localStorage.setItem("tokenKey", res.data.access_token);
-            localStorage.setItem("username", email);
+            localStorage.setItem("username", model.email);
             commit("showFullScreenLoader", true);
-            dispatch("getMyData");
+            dispatch("getMyData", true);
+            model.stopWait();
         }).catch((err)=>{
-            console.log(err);
+            console.dir(err);
+            model.stopWait(400);
         })
     
     },

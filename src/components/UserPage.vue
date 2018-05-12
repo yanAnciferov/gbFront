@@ -1,8 +1,8 @@
 <template>
  <div v-if="user != null" class="up-wrap">
-    <div class="mbg">
-        <img src="@/assets/search-bg.png" alt="bgа" class="bg2">
-        <img src="@/assets/search-bg2.png" alt="bg" class="bg1">
+    <div class="mbg" id="scene" >
+        <img data-depth="0.1" src="@/assets/bg-profil/fon_profili1.png" alt="bg">
+        <img data-depth="0.2" src="@/assets/bg-profil/fon_profili2.png" alt="bg">
     </div>
    <div class="user-info">
        <div class="bg">
@@ -14,7 +14,7 @@
                 <avatar :image="user.AvatarImage"/>
                 <div class="likes">
                     <img src="@/assets/like.svg" class="like" alt="like">
-                    <span>12</span>
+                    <span>{{likes}}</span>
                 </div>
             </div>
             <div class="right">
@@ -82,9 +82,23 @@
        <button class="btn add" @click="addWin = true" v-if="isMyPage">
            Добавить
        </button>
+       <div class="music">
+            <div class="tracks">
+                <div class="track" v-for="(item, index) in trackForShow" :key="index">
+                    <howler preload :audio='item' :sources='[item.Url]' ></howler>
+                </div>
+            </div>
+            <div class="categories">
+                <div :class="{category: true, active: selectedCat.indexOf(item) != -1}" @click="catClick(item)"
+                 v-for="(item, index) in user.Categories" :key='index'>
+                    <img :src="item.ImageUrl" :alt="item.Name">
+                </div>
+            </div>
+       </div>
+      
    </div>
 
-   <addAudio @close='addWin = false' v-if="addWin"/>
+   <addAudio @close='addWin = false; getAudioList(user.Id)' v-if="addWin"/>
  </div>
 </template>
 
@@ -93,29 +107,42 @@ import { mapGetters, mapActions } from 'vuex'
 
 import userInfo from "@/components/UserInfo"
 import playList from "@/components/PlayList"
-import testAudio from "@/components/audio/TestAudioControl"
+import audioControll from "@/components/audio/AudioControll"
 import addAudio from "@/components/audio/AddAudioWindow"
 import avatar from "@/components/Avatar"
+
+import howler from "@/components/audio/testHowler"
+import Parallax from 'parallax-js'
 
 export default {
   name: 'UserPage',
   data () {
     return {
-        isMyPage: false,
-        addWin: false
+        addWin: false,
+        selectedCat: []
     }
   },
   components: {
       userInfo,
-      testAudio,
+      audioControll,
       playList,
       addAudio,
-      avatar
+      avatar,
+      howler
   },
   methods:{
-      ...mapActions(["getUser", "getMyData",]),
+      ...mapActions(["getUser", "getMyData",'getAudioList']),
       startPlay(){
           this.$store.commit("setSoundToPlayer", "http://localhost:65266/Images/wakeup.mp3");
+      },
+      updateAudio(){
+          this.getAudioList(this.user.Id);
+      },
+      catClick(item){
+          var index = this.selectedCat.indexOf(item);
+          if(index == -1){
+              this.selectedCat.push(item)
+          }else this.selectedCat.splice(index, 1)
       }
   },
   computed:{
@@ -125,8 +152,34 @@ export default {
         myLogin: "getMyLogin",
         isAuth: "isAuthenticated",
         categories: "getUserCategory",
+        audios: "getUserPageAudioList"
       }),
+      likes(){
+          var sumLikes = 0;
+
+          this.audios.forEach((item) => {
+              sumLikes += item.CountLikes
+          })
+          return sumLikes;
+      },
+      trackForShow(){
+          if(this.selectedCat.length == 0){
+              console.log("!");
+             return this.audios
+
+          }
+          else {
+              var ids = this.selectedCat.map((cat) => {return cat.Id})
+              var res = this.audios.filter(audio => { 
+                 return ids.indexOf(audio.CategoryId) !== -1;
+              });
+              return res;
+          }
+      }
       
+  },
+
+  beforeCreate(){
       
   },
   created: function(){
@@ -137,6 +190,14 @@ export default {
     }else{
         this.$store.dispatch("getUser", this.$route.params["login"]);
     }
+
+    setTimeout(() => {
+        var scene = document.getElementById('scene');
+        var parallaxInstance = new Parallax(scene);
+        this.getAudioList(this.user.Id);
+    }, 500);
+
+    
       
   },
   beforeRouteUpdate(to, from, next){
@@ -153,6 +214,86 @@ export default {
 
 <style scoped>
 
+
+.category.active:hover::before{
+     content: ' ';
+    background-color: #ac7ec7;
+    border-radius: 50%;
+    height: calc(2.7em - 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 3px;
+    left: 2px;
+}
+
+.category.active::before{
+     content: ' ';
+    background-color: #ba98ce;
+    border-radius: 50%;
+    height: calc(2.7em - 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 3px;
+    left: 2px;
+}
+
+.category:hover::before{
+    content: ' ';
+    background-color: rgba(255, 255, 255, 0.719);
+    border-radius: 50%;
+    height: calc(2.7em - 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -2;
+    position: absolute;
+    top: 3px;
+    left: 2px;
+}
+
+.category::before{
+    content: ' ';
+    background-color: white;
+    border-radius: 50%;
+    height: calc(2.7em - 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -3;
+    position: absolute;
+    top: 3px;
+    left: 2px;
+}
+
+
+
+.track{
+    margin: 1em 0;
+}
+
+.tracks{
+    flex-grow: 1;
+}
+
+.categories{
+    width: 3em;
+}
+
+.category{
+    position: relative;
+    cursor: pointer;
+}
+
+.categories img{
+    width: 100%;
+}
+
 .ganres ul{
     list-style: none;
     color:#552152;
@@ -167,6 +308,10 @@ export default {
 .ganres ul li{
     margin-right: .5em;
     margin-bottom: .5em;
+}
+
+.music{
+    display: flex;
 }
 
 
@@ -204,8 +349,8 @@ a span{
 .mbg{
     z-index: -10;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: -1em;
+    left: -1em;
 }
 
 .mbg img{
@@ -252,6 +397,7 @@ a span{
     position: relative;
     padding: 3em;
     box-sizing: border-box;
+    max-width: 57vw;
 }
 
 .play-content, .bgp{

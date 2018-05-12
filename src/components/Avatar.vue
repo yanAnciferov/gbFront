@@ -2,8 +2,8 @@
      <div class="result-avatar">
         <div class="circle">
             <img class="circle-img" src="@/assets/frame-05.svg" alt="">
-            <div class="avatar">
-                <img :src="image" alt="">
+            <div :class="{avatar: true, horis: vertical}">
+                <img ref="img" :class="{vert: !vertical, horis: vertical}" :src="image" alt="">
             </div>
         </div>
     </div>
@@ -11,14 +11,42 @@
 
 <script>
 export default {
-  props:["image"]
+  props:["image"],
+    created(){ 
+        var img = new Image();
+        img.onload = () => {
+            console.log(img.width > img.height);
+            this.vertical = img.width > img.height;
+        }
+        img.src = this.image;
+        
+    },
+    data(){
+        return{
+            vertical: null
+        }
+    }
 }
+
 </script>
 
 
 <style scoped>
 
-  .result-avatar{
+.vert{
+    width: 100%;
+}
+
+.horis{
+    height: 100%;
+}
+
+.avatar.horis{
+    display: flex;
+    justify-content: center;
+}
+
+.result-avatar{
     width: 8em;
 }
 
@@ -51,8 +79,6 @@ export default {
     margin-left: .15em;
 }
 
-.avatar img{
-    width: 100%;
-}
+
 </style>
 

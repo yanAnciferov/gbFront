@@ -8,16 +8,23 @@
      </main>
   </div> -->
   <div class="category-main-wrap" id="categoriesPage">
-     <div class="bg">
-       <img src="@/assets/search-bg2.png" alt="" class="bg1">
-        <img src="@/assets/search-bg.png" alt="" class="bg2">
-    </div>
     
+   
+
     
     <div class="categories-wrapper">
+        <div id="scene" class="bg">
+            <img  data-depth="0.05" class="main-bg" src="@/assets/bg/fon1_Монтажная-область-1.png" alt="">
+            <img data-depth="0.10" src="@/assets/bg/fon3_Монтажная-область-1.png" alt="">
+            <img  data-depth="0.25" src="@/assets/bg/fon4_Монтажная область 1.png" alt="">
+            <img data-depth="0.60" src="@/assets/bg/fon2_Монтажная область 1.png" alt="">
+            <div class="filter"></div>
+        </div> 
         <div class="categories c-wrapper">
             <div class="category" @click="catClick(item)" v-for="(item, index) in categories" :key='index'>
-                <img :src="item.ImageUrl" :alt="item.Name">
+                <div :class="{'cat-bg': true, 'cat-active': select.indexOf(item) != -1}">
+                    <img :src="item.ImageUrl" :alt="item.Name">
+                </div>
                 <div class="category-name">{{item.Name}}</div>
             </div>
         </div>
@@ -36,6 +43,8 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex"
+
+import Parallax from 'parallax-js'
 
 export default {
     name: 'App',
@@ -56,18 +65,23 @@ export default {
     created(){
         
         setTimeout(()=>{
-            this.seeNext = true
-        }, 500)
+            this.seeNext = true;                  
+            var scene = document.getElementById('scene');
+            var parallaxInstance = new Parallax(scene);
+        }, 200)
     },
     computed:{
         ...mapGetters({
-            categories: 'getCategories'
+            categories: 'getCategories',
+            select: 'getSelectedCategories'
         })
     }
 }
 </script>
 
 <style scoped>
+
+
 
 @font-face {
     font-family: Adigiana; /* Имя шрифта */
@@ -97,6 +111,75 @@ export default {
 
 .category{
     cursor: pointer;
+    margin-bottom: 6em;
+}
+
+.cat-bg::before{
+    content: ' ';
+    background-color: white;
+    border-radius: 50%;
+    height: calc(8.5em - 1px);
+    width: 8.5em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -2;
+    position: absolute;
+    top: 2px;
+    left: 5px;
+}
+
+.cat-bg{
+    position: relative;
+}
+
+
+.cat-bg.cat-active:hover::before{
+    background-color: #9d74b4;
+     content: ' ';
+    border-radius: 50%;
+    height: calc(8.5em - 1px);
+    width: 8.5em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 2px;
+    left: 5px;
+}
+
+.cat-active::before{
+    background-color: #ba98ce;
+     content: ' ';
+    border-radius: 50%;
+    height: calc(8.5em - 1px);
+    width: 8.5em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 2px;
+    left: 5px;
+}
+
+.cat-bg:hover::before{
+   content: ' ';
+    border-radius: 50%;
+    height: calc(8.5em - 1px);
+    width: 8.5em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 2px;
+    left: 5px;
+
+    background-color: #c7c2c2;
+}
+
+.cat-bg img{
+   margin-top: -.15em;
+   margin-right: -1em;
+   width: 100%;
 }
 
 .category-name{
@@ -133,18 +216,26 @@ body{
 
 .bg{
     z-index: -10;
+     position: absolute;
+    top: -6em;
+    left: -.8em;
+    width: 101vw;
+    max-height: 170vh;
+    overflow: hidden;
 }
 
 .bg img{
     z-index: -10;
-    width: 100em;
-    position: fixed;
-    top: 0;
-    left: 0;
+    width: 100%;
+    margin-right: 1em;
 }
 
 
+
+
+
 .categories-wrapper{
+    position: relative;
     width: 100vw;
     display: flex;
     justify-content: center;
@@ -167,6 +258,7 @@ body{
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    margin-top: 2em;
    
 }
 
@@ -355,7 +447,14 @@ body{
     font-weight: bold;
 }
 
-
+.filter{
+    width: 200vw;
+    height: 200vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(255,255,255,.4);
+}
 
  .categories-wrapper{
         margin-right: 3em;

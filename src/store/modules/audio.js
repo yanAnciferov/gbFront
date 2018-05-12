@@ -19,12 +19,11 @@ const mutations = {
         state.userPageAudioList = audioList
         .map(element => {
           
-            element.Url = serverUrl + element.Url;
+           
             if(element.ImageCover == null){
                 element.ImageCover = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfvwpWlQPbOy0hMDI5-jJ8iyIXhBT_hZEKD7SkK3JdggKQDk3okQ";
             }
             element.IsPlaying = false;
-            console.log(element);
            return element;
         });
         
@@ -76,7 +75,6 @@ const actions = {
       },
 
       getAudioList({dispatch, getters}, id){
-          console.log(getters.isAuthenticated);
           if(getters.isAuthenticated){
             dispatch("getAudioListAuth", id);
           }else{
@@ -97,7 +95,8 @@ const actions = {
             params
         })
         .then(response => {
-            //commit("setUserPageAudioList", response.data);
+            console.log(response.data)
+            commit("setUserPageAudioList", response.data);
         })
         .catch(error => {
             console.log(error.response)
@@ -115,6 +114,7 @@ const actions = {
             params
         })
         .then(response => {
+            console.log(response.data)
             commit("setUserPageAudioList",response.data);
         })
         .catch(error => {
@@ -124,15 +124,19 @@ const actions = {
 
       audioLike({getters}, audio){
           if(getters.isAuthenticated){
-            if(audio.IsLiked)
+            if(audio.IsLicked)
                 audio.CountLikes--;
             else   
                 audio.CountLikes++;
-            audio.IsLiked = !audio.IsLiked;
+            audio.IsLicked = !audio.IsLicked;
             var params = new URLSearchParams();
             params.append("idUser", getters.getUser.Id);
             params.append("idTrack", audio.Id);
             axios.post(serverUrl + '/api/Tracks/Like', null, {
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded",
+                    "Authorization": "Bearer " + localStorage.getItem("tokenKey")
+               },
                 params
             })
               .then(response => {

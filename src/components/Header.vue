@@ -1,10 +1,19 @@
 <template>
   <header class="header">
         <div class='left-s'>
-            <img class="logo" src="@/assets/logo-02.svg" alt="">
+            <router-link to="/">
+                <img class="logo" src="@/assets/logo-02.svg" alt="">
+            </router-link>
+
+            <div class="search-input">
+                <input on:keyup.13="search" v-model="getSearchModel.FullName" placeholder="Поиск..." type="text">
+                <button class="search-btn" @click="search">
+                    <img src="@/assets/leftMenu/search.svg" alt="Искать">
+                </button>
+            </div>
         </div>
 
-        <div class='right-s'>
+        <div v-if="showSerach" class='right-s'>
             <div class="selectedCategories">
                 <div class="selectedCategory" @click="catClick(item)"
                  v-for="(item, index) in getSelectedCategories" :key='index'>
@@ -12,7 +21,7 @@
                 </div>
             </div>
 
-            <div class="geolocation" @click="geoPick = true">
+            <div :class="{geolocation: true, 'active-geo': geoPick}" @click="geoPick = true">
                 <div class="selectCountry" @click="countryWin = true; cityWin = false">
                     <span v-if="getSelectedCountry != null">
                         {{getSelectedCountry.Name}},
@@ -22,6 +31,7 @@
                         {{getSelectedCity.Name}}
                     </span>
                     <span v-else>Город</span>
+                    <img class="arrow" src="@/assets/cursor.svg" alt="">
                 </div>
             </div>
 
@@ -29,6 +39,8 @@
                 <div class="window-geo" v-if='countryWin'>
                     <div class="location-wrapper">
                         <ul>
+                            <div>Страны</div>
+                            <li>Страна</li>
                             <li @click="countryClick(item)" 
                                 v-for="(item, index) in getCountryList" :key='index'
                                 :class="{ active: item.isSelected }"
@@ -36,7 +48,9 @@
                                 {{item.Name}}
                             </li>
                         </ul>
-                        <ul>
+                        <ul class="cityul">
+                            <div>Города</div>
+                            <li>Город</li>
                             <li @click="cityClick(item)"
                                  v-for="(item, index) in getCityList" :key='index'
                                  :class="{ active: item.isSelected }">
@@ -68,7 +82,7 @@ export default {
     }
   },
   methods:{
-      ...mapActions(["logOf"]),
+      ...mapActions(["logOf","search"]),
       selectChanged(){
        this.$store.commit("setLanguage", this.language)
       },
@@ -98,7 +112,8 @@ export default {
         'getCountryList',
         'getCityList',
         'getSelectedCity',
-        'getSelectedCountry'
+        'getSelectedCountry',
+        'getSearchModel'
         ]),
     getUrl(){
       return "/" + this.getMyLogin;
@@ -119,7 +134,8 @@ export default {
             return Country.Id == this.getSelectedCountry.Id
         }
     }
-  }
+  },
+  props:["showSerach"]
  
 }
 </script>
@@ -127,7 +143,39 @@ export default {
 
 <style scoped>
 
+.search-btn{
+    border: none;
+    background-color: transparent;
+    outline: none;
+    width: 2em;
+    height: 2em;
+    position: relative;
+    left: -2.4em;
+    top: .2em;
+    cursor: pointer;
+}
 
+.search-btn img{
+    width: 100%;
+}
+
+.search-input{
+    margin-left: 3em;
+    
+}
+
+input[type='text']{
+    font-family: slimamif;
+    font-weight: bold;
+    font-size: 1em;
+
+    border: none;
+    outline: none;
+    padding: .3em .6em;
+    padding-right: 2em;
+    border-radius: 6px;
+    width: 11em;
+}
 
 @font-face {
     font-family: LifelsRU; /* Имя шрифта */
@@ -139,10 +187,16 @@ export default {
     src: url('../fonts/slimamif.ttf'); /* Путь к файлу со шрифтом */
 }
 
+.arrow{
+    width: 1.2em;
+}
 
+.cityul{
+    width: 150px;
+}
 
 .active{
-    
+    color:rgb(205, 158, 228);
 }
 
 .location-wrapper{
@@ -160,11 +214,18 @@ li{
 }
 
 li:hover{
-    background-color: beige;
+    color:rgb(205, 158, 228);
+}
+
+ul div{
+    text-align: center;
+    color: rgb(126, 87, 146);
+    font-family: LifelsRU;
+
 }
 
 ul{
-    widows: 100px;
+    width: 100px;
     padding: 0;
     margin: 0;
 }
@@ -182,7 +243,7 @@ ul{
 
 .window-geo{
     position: absolute;
-    width: 12em;
+    width: 15em;
     top: 4em;
     right: 2em;
     background-color: #fff;
@@ -197,16 +258,47 @@ ul{
     background-color: transparent;
     width: 100vw;
     padding: 0 2em;
+    padding-left: 1em;
     
     padding-top: .6em;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
+   z-index: 105;
+}
+
+
+.selectedCategory:hover::before{
+    content: ' ';
+    background-color: rgba(255, 255, 255, 0.719);
+    border-radius: 50%;
+    height: calc(2.7em + 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -2;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+
+.selectedCategory::before{
+    content: ' ';
+    background-color: white;
+    border-radius: 50%;
+    height: calc(2.7em + 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -3;
+    position: absolute;
+    top: 2px;
+    left: 2px;
 }
 
 .selectedCategory{
+    position: relative;
     width: 3em;
     margin: 0 .5em;
     cursor: pointer;
@@ -220,13 +312,13 @@ ul{
     display: flex;
     z-index: 16;
     cursor: pointer;
+    min-width: 15em;
 }
 
 
 
 .selectCity:hover, .selectCountry:hover{
     text-decoration: underline;
-    color: white;
 }
 
 .selectedCategories{
@@ -281,6 +373,13 @@ ul{
     display: flex;
 }
 
+.active-geo .selectCity, .active-geo .selectCountry{
+    color: white;
+}
+
+.active-geo .arrow{
+    display: none;
+}
 
 .selectedCategories{
     display: flex;

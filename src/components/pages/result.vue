@@ -1,23 +1,23 @@
 <template>
   <div class="result-main-wrap">
-    <div class="bg">
-        <img src="@/assets/search-bg2.png" alt="bg" class="bg1">
-        <img src="@/assets/search-bg.png" alt="bgа" class="bg2">
+    <div class="mbg" id="scene" >
+        <img data-depth="0.1" src="@/assets/bg-profil/fon_profili1.png" alt="bg">
+        <img data-depth="0.2" src="@/assets/bg-profil/fon_profili2.png" alt="bg">
     </div>
-       
+       <div class="result-info">
+            <div class="result-info-content">
+                Результаты поиска - <span class="count-result">найдено {{users.length}} {{wordPeople}}</span>
+            </div>
+        </div>
         <div class="result-content-wrapper">
-            <div class="result-v2">
+            
+            <div class="result-v2" v-if="users.length != 0">
                 <div v-for="(item, index) in users" :key='index' class="user-result" @click="selectedItem = item">
                     <div class="result-bg">
                         <img src="@/assets/prof_mini-04.png" alt="">
                     </div>
                     <div class="result-avatar">
-                        <div class="circle">
-                            <img class="circle-img" src="@/assets/frame-05.svg" alt="">
-                            <div class="avatar">
-                                <img :src="item.AvatarImage" alt="">
-                            </div>
-                        </div>
+                        <Avatar :image="item.AvatarImage" />
                     </div>
                     <div class="result-content">
                         <div class="name">
@@ -26,7 +26,7 @@
                             </router-link>
                         </div>
                         <div class="location">
-                            {{item.City.Country.Name}}, {{item.City.Name}}
+                            
                         </div>
                         <div  class="result-categories">
                             <div v-for="(cat, index) in item.Categories" :key='index' class="resCategory">
@@ -53,6 +53,8 @@ import Footer from '@/components/Footer'
 import Loader from '@/components/Loader'
 import Player from '@/components/audio/Player'
 import LoadWindow from '@/components/LoadWindow'
+import Avatar from "@/components/Avatar"
+import Parallax from 'parallax-js'
 
 import {mapActions, mapGetters} from "vuex"
 
@@ -71,6 +73,7 @@ export default {
     // Loader,
     // Player,
     // LoadWindow
+    Avatar
   },
   methods:{
      onSelected(selectedItem){
@@ -92,12 +95,59 @@ export default {
     computed: {
         ...mapGetters({
             users: 'getSearchResult'
-        })
+        }),
+        wordPeople(){
+            var num = this.users.length % 10;
+            if(num == 2 || num % 10 == 3 || num % 10 == 4)
+                return "человека";
+            else return "человек"
+        }
+    },
+    created(){
+        setTimeout(()=>{                
+            var scene = document.getElementById('scene');
+            var parallaxInstance = new Parallax(scene);
+        }, 1000)
     }
 }
 </script>
 
 <style scoped>
+
+.count-result{
+    color: #552152;
+    font-family: slimamif;
+}
+
+.result-info-content{
+    font-family: LifelsRU;
+    color: white;
+    font-weight: bold;
+    font-size: 1.3em;
+    color: #552152;
+}
+
+.result-info-bg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    
+}
+.result-info-bg img{
+    width: 100%;
+    height: 100%;
+}
+
+.result-info{
+    position: relative;
+    height: 1em;
+    width: calc(100% - 16em);
+    margin: 0 9em;
+    margin-bottom: 2em;
+}
 
 @font-face {
     font-family: Adigiana; /* Имя шрифта */
@@ -114,6 +164,21 @@ export default {
     src: url('../../fonts/slimamif.ttf'); /* Путь к файлу со шрифтом */
 }
 
+
+.mbg{
+    z-index: -10;
+    position: fixed;
+    top: -1em;
+    left: -1em;
+}
+
+.mbg img{
+    z-index: -10;
+    width: 100em;
+}
+
+
+
 .result-main-wrap{
     padding-top: 4em;
 }
@@ -125,8 +190,22 @@ body{
     overflow-x: hidden;
 }
 
+.resCategory::before{
+    content: ' ';
+    background-color: white;
+    border-radius: 50%;
+    height: calc(2.8em - 1px);
+    width: 2.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+}
 
 .resCategory {
+    position: relative;
     width: 3em;
     height: 3em;
 }
@@ -280,7 +359,7 @@ body{
 
 .result-content .name{
     margin-bottom: .3em;
-    color: #a688a8;
+    color:#DC9E02;
     font-size: 1.3em;
     font-family: LifelsRU;
     font-weight: bold;
@@ -364,7 +443,6 @@ body{
 }
 
 .result-v2{
-    margin-top: 3em;
     padding: 0 8em;
     padding-right: 0;
     display: flex;
@@ -471,11 +549,12 @@ body{
 }
 
 
-
-
+.name a:hover{
+    text-decoration: underline;
+}
 .name a{
     text-decoration: none;
-    color: #a688a8;
+    color:#DC9E02;
     font-weight: bold;
 }
 

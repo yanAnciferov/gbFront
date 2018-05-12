@@ -1,15 +1,15 @@
  <template>
  <div class="wrap">
-     <div class="mbg">
-        <img src="@/assets/search-bg.png" alt="bgа" class="bg2">
-        <img src="@/assets/search-bg2.png" alt="bg" class="bg1">
+    <div class="mbg" id="scene" >
+        <img data-depth="0.1" src="@/assets/bg-profil/fon_profili1.png" alt="bg">
+        <img data-depth="0.2" src="@/assets/bg-profil/fon_profili2.png" alt="bg">
     </div>
-     <h2>Настройки профиля</h2>
+    <h2></h2>
      
 
 
-     <div class="block">
-         <div class="bg-block">
+     <div class="block main-block">
+         <div class="bg-block main-block">
             <img src="@/assets/audio-bg.png" alt="bg">
         </div>
 
@@ -19,12 +19,8 @@
 
 
                 <div class="result-avatar">
-                    <div class="circle">
-                        <img class="circle-img" src="@/assets/frame-05.svg" alt="">
-                        <div class="avatar">
-                            <img :src="user.AvatarUrl" alt="">
-                        </div>
-                    </div>
+                   
+                    <avatar :image="user.AvatarImage"/>
                 </div>
 
 
@@ -80,6 +76,14 @@
                                 {{item.Name}}</option>
                             </select>
                              </p>
+                        </div>
+                    </div>
+                    <div class="phone">
+                         <label for="">Номер телефона</label>
+                        <div class="horiz">
+                            <p class="formRow">
+                                <input @blur="phoneChange" v-model="user.Phone" type="text">
+                            </p>
                         </div>
                     </div>
                 </form>
@@ -301,6 +305,7 @@
 import { mapActions, mapGetters } from "vuex"
 import Avatar from "@/components/Avatar"
 import LoadWindow from "@/components/LoadWindow"
+import Parallax from 'parallax-js'
 
 export default {
   name: 'settings',
@@ -363,6 +368,9 @@ export default {
      lastnameChange(){
         if(this.user.Lastname != '')
             this.$store.dispatch('updateLastName',this.user.Lastname)
+    }, 
+    phoneChange(){
+        
     }
   },
   computed:{
@@ -374,7 +382,13 @@ export default {
   },
   beforeCreate(){
       this.$store.dispatch('loadCountries');
-  }
+  }, 
+  created(){
+        setTimeout(()=>{                
+            var scene = document.getElementById('scene');
+            var parallaxInstance = new Parallax(scene);
+        }, 500)
+    }
 }
 </script>
 
@@ -525,8 +539,8 @@ div.social{
 .mbg{
     z-index: -10;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: -1em;
+    left: -1em;
 }
 
 .mbg img{
@@ -561,6 +575,8 @@ h2, h3{
     position: relative;
 }
 
+
+
 .bg-block{
     z-index: -10;
     position: absolute;
@@ -575,6 +591,9 @@ h2, h3{
     height: 21em;
 }
 
+.main-block{
+    height: 19em;
+}
 
 .bg-block img{
     width: 100%;

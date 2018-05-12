@@ -115,7 +115,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+input[type="text"]{
+  
+}
 .wrapper{
     padding: 2em 0;
 }
@@ -138,7 +140,11 @@ h2{
 }
 
 input{
-    padding: .4em;
+     box-sizing: border-box;
+    border: none;
+    padding: 1em;
+    outline: none;
+    border-radius: 5px;
 }
 
 .submit{

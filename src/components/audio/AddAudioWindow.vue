@@ -122,6 +122,63 @@ export default {
 
 <style scoped>
 
+
+.cat.active:hover::before{
+     content: ' ';
+    background-color: #ac7ec7;
+    border-radius: 50%;
+    height: calc(4.7em - 1px);
+    width: 4.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
+.cat.active::before{
+     content: ' ';
+    background-color: #ba98ce;
+    border-radius: 50%;
+    height: calc(4.7em - 1px);
+    width: 4.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
+.cat:hover::before{
+    content: ' ';
+    background-color: rgba(255, 255, 255, 0.719);
+    border-radius: 50%;
+    height: calc(4.7em - 1px);
+    width: 4.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -2;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
+.cat::before{
+    content: ' ';
+    background-color: white;
+    border-radius: 50%;
+    height: calc(4.7em - 1px);
+    width: 4.7em;
+    margin-bottom: 1em;
+    display: block;
+    z-index: -3;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
 .text{
     color: white; 
     font-family: slimamif;
@@ -179,17 +236,11 @@ export default {
     background-color: transparent;
     cursor: pointer;
     position: relative;
+    overflow: hidden;
 }
 
 
-.active{
-    border: 1px solid white;
-}
 
-.cat:hover{
-    background-color: #552152;
-    
-}
 
 .cat img{
     width: 100%;
@@ -207,7 +258,7 @@ export default {
       align-items: center;
       top: 0;
       left: 0;
-
+    z-index: 20;
   }
 
 
@@ -339,5 +390,7 @@ export default {
       width: 400px;
       box-sizing: border-box;
       margin-top: .5em;
+       font-family: LifelsRU;
+    font-size: 1em;
   }
 </style>

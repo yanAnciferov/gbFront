@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <Header class="header"/>
+
+    <Header :showSerach='showSerach' class="header"/>
     <LeftMenu class="menu"/>
      <transition :name="transitionName">
        <router-view class="router"/>
@@ -21,6 +22,8 @@ import LoadWindow from '@/components/LoadWindow'
 import LeftMenu from '@/components/leftMenu'
 
 import {mapActions} from "vuex"
+import categoriesVue from './components/pages/categories.vue';
+import Parallax from 'parallax-js'
 
 export default {
   name: 'App',
@@ -36,14 +39,15 @@ export default {
     return{
       transitionName: '',
       start: true,
-      loaded: true
+      loaded: true,
+      showSerach: false,
+      currentPage: false
     }
   },
-  methods:{
-    // onScroll(){
-    //   console.dir(footer);
-
-    // }
+  computed:{
+    bg(){
+      return 
+    }
   },
   beforeCreate(){
     // this.language = this.$store.getters.getLanguage;
@@ -66,6 +70,14 @@ export default {
             this.start = true;
           else this.start = false;
 
+          if(toDepth == 'categories'){
+            this.currentPage = 'categories'
+          }
+
+          if(toDepth == 'result' || toDepth == 'categories'){
+            this.showSerach = true;
+          }else this.showSerach = false;
+
         //  if(fromDepth == "categories" && toDepth == "result")
         //    this.transitionName = 'slide-left'
         //     else if(fromDepth == "")
@@ -75,11 +87,39 @@ export default {
         //   else if(toDepth == "result" || toDepth == "categories")
         //     this.transitionName = 'slide-right'
        }
+     },
+     created(){
+        setTimeout(()=>{
+            this.seeNext = true;                  
+            var scene = document.getElementById('scene');
+            var parallaxInstance = new Parallax(scene);
+        }, 1500)
      }
 }
 </script>
 
 <style >
+
+.bg{
+    z-index: -10;
+     position: fixed;
+    top: -6em;
+    left: -.8em;
+    width: 101vw;
+    max-height: 160vh;
+    overflow: hidden;
+}
+
+.bg img{
+    z-index: -10;
+    width: 100%;
+    margin-right: 1em;
+}
+
+#app{
+  position: relative;
+}
+
 
 html, body, #app{
   min-height: 100vh;

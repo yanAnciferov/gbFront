@@ -3,10 +3,11 @@
    <div class="main-wrapper">
     <div 
     v-bind:class="{'image-wrapper': true, 'playing': audio.IsPlaying, 'paused': !audio.IsPlaying }" 
-    v-on:click="onPlay">
+    >
         <img :src="audio.ImageCover" alt="Image Cover">
         <!-- <img src="@/assets/pause.svg" class="pause " alt="pause">
         <img src="@/assets/play.svg" class="play" alt="play"> -->
+        <!-- <howler :sources='[audio.Url]' ></howler> -->
     </div>
     <div class="audio-content-wrapper">
       <div class="player-wrapper">
@@ -28,13 +29,13 @@
 
 <script>
 
-import addAudioWindow from "@/components/audio/AddAudioWindow"
+import howler from "@/components/audio/testHowler"
 import { mapActions,mapGetters } from "vuex"
 
 export default {
   name: 'audio-control',
   components:{
-      addAudioWindow
+      howler
   },
   props: ["audio"],
   data () {
@@ -45,9 +46,9 @@ export default {
     onLike(){
       this.$store.dispatch("audioLike", this.audio);
     },
-    onPlay(){
-      this.$store.commit("setSoundToPlayer", this.audio);
-    }
+    // onPlay(){
+    //   this.$store.commit("setSoundToPlayer", this.audio);
+    // }
   },
   computed:{
       ...mapGetters({
