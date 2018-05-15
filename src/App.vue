@@ -58,6 +58,7 @@ export default {
         //   this.$store.commit("showFullScreenLoader", false);
         // }
       this.$store.dispatch('getCategories');
+      this.$store.dispatch('getGenres');
       this.$store.dispatch('loadCountries');
       setTimeout(() => {this.loaded = false}, 2000)
 

@@ -76,9 +76,43 @@ const getters = {
     },
     getLanguage(){
         return localStorage.getItem("lang");
-    }
+    },
+
+    getDays(month){
+
+    },
+    
+    getYears(){
+        var arr = [];
+        var a = 2015;
+        for(; a >= 1920; a--){
+            arr.push(a);
+        }
+        return arr;
+    },
+
+    getMonth(){
+        return ['Январь',
+                'Февраль',
+                'Март',
+                'Апрель',
+                'Май',
+                'Июнь',
+                'Июль',
+                'Август',
+                'Сентябрь',
+                'Октябрь',
+                'Ноябрь',
+                'Декабрь'];
+        
+    },
+
+   
 
 }
+      
+    
+
 
 
 export default {

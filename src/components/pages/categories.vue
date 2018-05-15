@@ -118,14 +118,14 @@ export default {
     content: ' ';
     background-color: white;
     border-radius: 50%;
-    height: calc(8.5em - 1px);
-    width: 8.5em;
+    height: calc(8.5em - .5px);
+    width: calc(8.5em );
     margin-bottom: 1em;
     display: block;
     z-index: -2;
     position: absolute;
     top: 2px;
-    left: 5px;
+    left: 3px;
 }
 
 .cat-bg{
@@ -136,42 +136,42 @@ export default {
 .cat-bg.cat-active:hover::before{
     background-color: #9d74b4;
      content: ' ';
-    border-radius: 50%;
-    height: calc(8.5em - 1px);
-    width: 8.5em;
+     border-radius: 50%;
+    height: calc(8.5em - .5px);
+    width: calc(8.5em );
     margin-bottom: 1em;
     display: block;
-    z-index: -1;
+    z-index: -2;
     position: absolute;
     top: 2px;
-    left: 5px;
+    left: 3px;
 }
 
 .cat-active::before{
     background-color: #ba98ce;
      content: ' ';
-    border-radius: 50%;
-    height: calc(8.5em - 1px);
-    width: 8.5em;
+   border-radius: 50%;
+    height: calc(8.5em - .5px);
+    width: calc(8.5em );
     margin-bottom: 1em;
     display: block;
-    z-index: -1;
+    z-index: -2;
     position: absolute;
-    top: 2px;
-    left: 5px;
+   top: 2px;
+    left: 3px;
 }
 
 .cat-bg:hover::before{
    content: ' ';
     border-radius: 50%;
-    height: calc(8.5em - 1px);
-    width: 8.5em;
+    height: calc(8.5em - .5px);
+    width: calc(8.5em );
     margin-bottom: 1em;
     display: block;
-    z-index: -1;
+    z-index: -2;
     position: absolute;
     top: 2px;
-    left: 5px;
+    left: 3px;
 
     background-color: #c7c2c2;
 }
@@ -220,7 +220,7 @@ body{
     top: -6em;
     left: -.8em;
     width: 101vw;
-    max-height: 170vh;
+    max-height: 195vh;
     overflow: hidden;
 }
 
@@ -265,7 +265,7 @@ body{
 .c-wrapper .category{
     width: 9em;
     height: 9em;
-    margin: 1.25em 2.75em;
+    margin: 2em 2.75em;
 
     
 }
@@ -452,7 +452,6 @@ body{
     height: 200vh;
     position: fixed;
     top: 0;
-    left: 0;
     background-color: rgba(255,255,255,.4);
 }
 

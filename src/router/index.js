@@ -38,7 +38,7 @@ export default new Router({
     {
       path: '/registration',
       name: 'RegistrationPage',
-      component: RegistrationPage,
+      component: LoginPage,
       beforeEnter: (to, from, next)=>{
 
         if(!store.getters.isAuthenticated) {

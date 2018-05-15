@@ -9,6 +9,8 @@ import audio from './modules/audio'
 import categories from './modules/categories'
 import search from './modules/search'
 import social from './modules/social'
+import genres from './modules/genres'
+
 
 Vue.use(Vuex);
 
@@ -24,7 +26,8 @@ const store = new Vuex.Store({
         audio,
         categories,
         search,
-        social
+        social,
+        genres
       }
 })
 

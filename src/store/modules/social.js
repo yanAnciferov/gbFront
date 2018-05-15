@@ -14,7 +14,7 @@ const mutations = {
 
 const actions = {
     set({getters},param){
-
+        param.stateModel.social = "Применение.."
         var params = new URLSearchParams();
         var email = localStorage.getItem("username");
         params.append("iduser", getters.getUser.Id);
@@ -28,15 +28,17 @@ const actions = {
             params
           })
             .then(response => {
-            
+              param.stateModel.social = "Изменения сохранены"
               console.log(response)
             })
             .catch(error => {
+              param.stateModel.social = "Ошибка"
               console.log(error.response);
             })
     },
 
-    drop({getters}, socName){
+    drop({getters}, {socName, stateModel}){
+      stateModel.social = "Применение.."
         var params = new URLSearchParams();
         params.append("iduser", getters.getUser.Id);
 
@@ -48,18 +50,20 @@ const actions = {
             params
           })
             .then(response => {
+              stateModel.social = "Изменения сохранены"
               console.log(response)
             })
             .catch(error => {
+              stateModel.social = "Ошибка"
               console.log(error.response);
             })
     },
 
-    updateAbout({getters}, text){
+    updateAbout({getters}, model){
         var params = new URLSearchParams();
         params.append("iduser", getters.getUser.Id);
-        params.append("about", text);
-
+        params.append("about", getters.getUser.About);
+        model.about = "Применение..."
         axios.post(serverUrl + '/api/Account/SetAbout', null, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -68,9 +72,11 @@ const actions = {
             params
           })
             .then(response => {
+              model.about = "Изменения сохранены"
               console.log(response)
             })
             .catch(error => {
+              model.about = "Ошибка"
               console.log(error.response);
             })
     },
@@ -113,7 +119,54 @@ const actions = {
             .catch(error => {
               console.log(error.response);
             })
-    }
+    }, 
+
+    updateCity(){
+
+    },
+
+    setPhone({getters}, phone){
+      var params = new URLSearchParams();
+      params.append("iduser", getters.getUser.Id);
+      params.append("phoneNumber", phone);
+
+      axios.post(serverUrl + '/api/Account/dropPhoneNumber', null, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + localStorage.getItem("tokenKey")
+          },
+          params
+        })
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error.response);
+          })
+    },
+
+
+    dropPhone({getters}){
+      var params = new URLSearchParams();
+      params.append("iduser", getters.getUser.Id);
+      
+
+      axios.post(serverUrl + '/api/Account/dropPhoneNumber', null, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + localStorage.getItem("tokenKey")
+          },
+          params
+        })
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error.response);
+          })
+    },
+
+
 
 
 

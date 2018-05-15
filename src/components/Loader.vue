@@ -2,6 +2,9 @@
   <div class="loader-screen">
     <div v-lang.loader.title></div>
   </div>
+  <!-- <div class="loader-screen">
+    <img src="" alt="">
+  </div> -->
 </template>
 <script>
 

@@ -5,27 +5,38 @@
              <!-- <div class="bg">
                  <img src="@/assets/profil.png" alt="bg">
             </div> -->
-            <div class="home" v-if="auth">
+            <div class="home item" v-if="auth">
                 <router-link :to="login">
                     <img src="@/assets/leftMenu/home.svg" alt="">
+                    <span class="title">Домой</span>
                 </router-link>
             </div>
-            <div class="search">
+            <div class="search item">
                 <router-link to="/categories">
                     <img src="@/assets/leftMenu/search.svg" alt="">
+                    <span class="title">Поиск</span>
                 </router-link>
             </div>
-             <div class="setting" v-if="auth">
+             <div class="setting item" v-if="auth">
                 <router-link to="/settings">
                     <img src="@/assets/leftMenu/settings.svg" alt="">
+                    <span class="title">Настройки</span>
                 </router-link>
             </div>
-            <div class="exit" v-if="auth" @click='logOf()'>
+            <div class="exit item" v-if="auth" @click='logOf()'>
                 <img src="@/assets/leftMenu/enter.svg" alt="">
+                <span class="title">Выход</span>
             </div>
-            <div class="login" v-if="!auth">
+             <div class="exit item" v-if="!auth">
+                <router-link to="/registration">
+                    <img src="@/assets/regestration.svg" alt="">
+                    <span class="title">Регистрация</span>
+                </router-link>
+            </div>
+            <div class="login item" v-if="!auth">
                 <router-link to="/login">
-                    <img src="@/assets/exit.svg" alt="">
+                    <img src="@/assets/enter.svg" alt="">
+                    <span class="title">Вход</span>
                 </router-link>
             </div>
             
@@ -63,6 +74,31 @@ export default {
 
 
 <style scoped>
+
+.item{
+    position: relative;
+    height: 4em;
+}
+
+.title {
+    font-family: slimamif;
+    font-weight: bold;
+    
+    font-size: 1.5em;
+    position: absolute;
+    top: .5em;
+    
+    left: 2.5em;
+    width: auto;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:active, a:hover{
+ color: white;
+}
 
 .bg{
     z-index: -10;

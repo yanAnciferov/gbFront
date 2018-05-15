@@ -10,6 +10,9 @@ import vuescroll from 'vue-scroll'
 import multiLanguage from 'vue-multilanguage/src/vue-multilanguage.js' 
 import VueHowler from 'vue-howler'
 
+import vSelect from 'vue-select'
+Vue.component('v-select', vSelect)
+
 
 import language from './lang/language'
  

@@ -63,7 +63,9 @@
             </select>
         </div>
         <div class="submit-wrapper">
-            <input  class="submit" type="submit" value="Регестрация">
+            <button  class="submit" type="submit">
+                Регестрация
+            </button>
         </div>
     </form>
   </div>
@@ -115,8 +117,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-input[type="text"]{
-  
+
+input[type='text'], input[type='password'], input[type='email']{
+    border: none;
+}
+
+
+h2, h3, label{
+    font-family: LifelsRU;
+    font-weight: bold;
+    color: #552152;
 }
 .wrapper{
     padding: 2em 0;
@@ -139,20 +149,19 @@ h2{
     margin-bottom: 1em;
 }
 
-input{
-     box-sizing: border-box;
-    border: none;
-    padding: 1em;
-    outline: none;
-    border-radius: 5px;
+.submit:hover{
+    color:#552152;
 }
 
+
 .submit{
-  margin-top: 1em;
-  padding: .5em 1em ; 
-  border: none;
-  background-color: rgb(24, 62, 187);
-  color: white;
+    background-color: transparent;
+    font-family: LifelsRU;
+    border: none;
+    color: white;
+    font-size: 1.3em;
+    margin: 0 .5em;
+    cursor: pointer;
 }
 
 label{

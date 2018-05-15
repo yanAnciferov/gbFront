@@ -6,8 +6,8 @@
             </router-link>
 
             <div class="search-input">
-                <input on:keyup.13="search" v-model="getSearchModel.FullName" placeholder="Поиск..." type="text">
-                <button class="search-btn" @click="search">
+                <input on:keyup.13="searchEnter" v-model="getSearchModel.FullName" placeholder="Поиск..." type="text">
+                <button class="search-btn" @click="searchEnter">
                     <img src="@/assets/leftMenu/search.svg" alt="Искать">
                 </button>
             </div>
@@ -20,6 +20,26 @@
                     <img :src="item.ImageUrl" :alt="item.Name">
                 </div>
             </div>
+
+             <div class="selectedGenres">
+                <div class="selectedGenre" @click="genWinClick(item)"
+                 v-for="(item, index) in getSelectedGenres" :key='index'>
+                    {{item.Name}}
+                </div>
+            </div>
+            <div class="selectionGenres" @click="genrePick = true">
+                <span>#жанры</span> 
+                <img class="arrow" src="@/assets/cursor.svg" alt="">
+            </div>
+            <div v-if="genrePick" class="genresWindow">
+                <ul>
+                    <li @click="genWinClick(item)" v-for="(item, index) in getGenres" :key='index'>
+                        {{item.Name}}
+                    </li>
+                </ul>
+                
+            </div>
+            <div v-if="genrePick" @click="genrePick = false" class="geo-bg"></div>
 
             <div :class="{geolocation: true, 'active-geo': geoPick}" @click="geoPick = true">
                 <div class="selectCountry" @click="countryWin = true; cityWin = false">
@@ -77,6 +97,7 @@ export default {
        lang: this.language,
        menuVisible: false,
        geoPick: false,
+       genrePick: false,
        cityWin: false,
        countryWin: false
     }
@@ -102,6 +123,13 @@ export default {
       },
       cityClick(city){
            this.$store.dispatch('setCity', city)
+      },
+      searchEnter(){
+          this.$store.dispatch('search');
+          this.$router.push('result');
+      },
+      genWinClick(gen){
+          this.$store.commit('toggleGenre', gen);
       }
   },
   computed:{
@@ -113,7 +141,9 @@ export default {
         'getCityList',
         'getSelectedCity',
         'getSelectedCountry',
-        'getSearchModel'
+        'getSearchModel',
+        'getGenres',
+        'getSelectedGenres'
         ]),
     getUrl(){
       return "/" + this.getMyLogin;
@@ -143,6 +173,27 @@ export default {
 
 <style scoped>
 
+.selectionGenres{
+    cursor: pointer;
+        color:#5B4069;
+    font-family: LifelsRU;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.selectionGenres:hover{
+    text-decoration: underline;
+}
+.genresWindow{
+    background-color: #fff;
+    z-index: 165;
+    border-radius: 7px;
+    max-height: 15em;
+    overflow: hidden;
+    position: relative;
+    top: 6.5em;
+}
+
 .search-btn{
     border: none;
     background-color: transparent;
@@ -153,6 +204,27 @@ export default {
     left: -2.4em;
     top: .2em;
     cursor: pointer;
+}
+
+.selectedGenres{
+    display: flex;
+    max-width: 20em;
+    overflow-y: hidden;
+}
+
+.selectedGenre{
+    margin: 0 .5em;  
+    color:#5B4069;
+    font-family: LifelsRU;
+    font-weight: bold;
+    font-size: 1.2em;
+    cursor: pointer;
+    width: auto;
+    display: inline;
+}
+
+.selectedGenre:hover{
+    text-decoration: underline;
 }
 
 .search-btn img{
@@ -237,7 +309,7 @@ ul{
     width: 100vw;
     height: 100vh;
     background-color: #333333cc;
-    z-index: 15;
+    z-index: 164;
     
 }
 
@@ -248,7 +320,7 @@ ul{
     right: 2em;
     background-color: #fff;
     border-radius: .4em;
-    z-index: 16;
+    z-index: 165;
 
 }
 
@@ -260,12 +332,13 @@ ul{
     padding: 0 2em;
     padding-left: 1em;
     
-    padding-top: .6em;
+    padding-top: 1em;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-   z-index: 105;
+    z-index: 105;
+    height: 4em;
 }
 
 
@@ -310,7 +383,7 @@ ul{
 
 .geolocation{
     display: flex;
-    z-index: 16;
+    z-index: 165;
     cursor: pointer;
     min-width: 15em;
 }
@@ -349,7 +422,7 @@ ul{
     border-radius: 15px;
 }
 .logo{
-    height: 4em;
+    height: 2em;
 }
 
 .geolocation{

@@ -36,9 +36,10 @@
                 </label>
                 <!-- <span class="error" v-if="error">Формат файла должен быть .mp3</span> -->
 
-
-                <input v-if="imageUrl" type=button value=Upload @click="uploadAvatar">
-
+                <div class="uploadWrapper">
+                    <input class="uploadAvatar" v-if="imageUrl" type=button value=Загрузить @click="uploadAvatar">
+                </div>
+                
                 </form>
             </div>
 
@@ -68,8 +69,10 @@
                             </select>
                              </p>
                              <p class="formRow">
-                            <select :disabled='selectedCountry == ""'>
-                                <option>Город</option>
+                            <select @change="cityClick()"
+                                v-model="selectedCity"
+                                :disabled='selectedCountry == "Страна"'>
+                                <option value="Город" disabled>Город</option>
                                 <option :value="item.name" v-for="(item, index) in city" :key='index'
                                 :class="{ active: item.isSelected }"
                             >
@@ -120,7 +123,10 @@
         <div class="bg-block">
             <img src="@/assets/audio-bg.png" alt="bg">
         </div>
-        <h3>Социальные сети</h3>
+         <h3>
+            <span>Социальные сети</span>
+            <span class="state">{{stateModel.social}}</span>
+        </h3>
 
         <div class="social">
             <div class="name">
@@ -136,7 +142,7 @@
                     <div class="text">
                         <input v-model="socialModel.fb.text" id="fbUrl" type="text">
                     </div>
-                    <button class="close" @click="set( {newLink: socialModel.fb.text, socName: 'Facebook'} ); 
+                    <button class="close" @click="set( {newLink: socialModel.fb.text, socName: 'Facebook', stateModel} ); 
                     user.SocNetworks.FaceBook = socialModel.fb.text;  socialModel.fb.inputActive = false">Подтвердить</button>
                     <button class="close" @click="socialModel.fb.inputActive = false">X</button>
                 </div>
@@ -144,7 +150,7 @@
                 <div v-if="user.SocNetworks != null  && user.SocNetworks.FaceBook != null" class="drop">
                     
                     <span class="link">{{user.SocNetworks.FaceBook}}</span>
-                    <button class="close" @click="drop('Facebook'); user.SocNetworks.FaceBook = null; socialModel.fb.text = ''">X</button>
+                    <button class="close" @click="drop({socName: 'Facebook', stateModel}); user.SocNetworks.FaceBook = null; socialModel.fb.text = ''">X</button>
                 </div>
             </div>
         </div>
@@ -163,7 +169,7 @@
                     <div class="text">
                         <input v-model="socialModel.inst.text" id="instUrl" type="text">
                     </div>
-                    <button class="close" @click="set( {newLink: socialModel.inst.text, socName: 'Instagram'} ); 
+                    <button class="close" @click="set( {newLink: socialModel.inst.text, socName: 'Instagram', stateModel} ); 
                     user.SocNetworks.Instagram = socialModel.inst.text;  socialModel.inst.inputActive = false">Подтвердить</button>
                     <button class="close" @click="socialModel.inst.inputActive = false">X</button>
                 </div>
@@ -171,7 +177,7 @@
                 <div v-if="user.SocNetworks != null  && user.SocNetworks.Instagram != null" class="drop">
                     
                     <span class="link">{{user.SocNetworks.Instagram}}</span>
-                    <button class="close" @click="drop('Instagram'); user.SocNetworks.Instagram = null; socialModel.inst.text = ''">X</button>
+                    <button class="close" @click="drop({socName: 'Instagram', stateModel}); user.SocNetworks.Instagram = null; socialModel.inst.text = ''">X</button>
                 </div>
             </div>
         </div>
@@ -191,7 +197,7 @@
                     <div class="text">
                         <input v-model="socialModel.tube.text" id="tubeUrl" type="text">
                     </div>
-                    <button class="close" @click="set( {newLink: socialModel.tube.text, socName: 'YouTube'} ); 
+                    <button class="close" @click="set( {newLink: socialModel.tube.text, socName: 'YouTube', stateModel} ); 
                     user.SocNetworks.YouTube = socialModel.tube.text;  socialModel.tube.inputActive = false">Подтвердить</button>
                     <button class="close" @click="socialModel.tube.inputActive = false">X</button>
                 </div>
@@ -199,7 +205,7 @@
                 <div v-if="user.SocNetworks != null  && user.SocNetworks.YouTube != null" class="drop">
                     
                     <span class="link">{{user.SocNetworks.YouTube}}</span>
-                    <button class="close" @click="drop('YouTube'); user.SocNetworks.YouTube = null; socialModel.tube.text = ''">X</button>
+                    <button class="close" @click="drop({socName: 'YouTube', stateModel}); user.SocNetworks.YouTube = null; socialModel.tube.text = ''">X</button>
                 </div>
             </div>
         </div>
@@ -218,7 +224,7 @@
                     <div class="text">
                         <input v-model="socialModel.tunes.text" id="tunesUrl" type="text">
                     </div>
-                    <button class="close" @click="set( {newLink: socialModel.tunes.text, socName: 'iTunes'} ); 
+                    <button class="close" @click="set( {newLink: socialModel.tunes.text, socName: 'iTunes', stateModel} ); 
                     user.SocNetworks.iTunes = socialModel.tunes.text;  socialModel.tunes.inputActive = false">Подтвердить</button>
                     <button class="close" @click="socialModel.tunes.inputActive = false">X</button>
                 </div>
@@ -226,7 +232,7 @@
                 <div v-if="user.SocNetworks != null  && user.SocNetworks.iTunes != null" class="drop">
                     
                     <span class="link">{{user.SocNetworks.iTunes}}</span>
-                    <button class="close" @click="drop('iTunes'); user.SocNetworks.iTunes = null; socialModel.tunes.text = ''">X</button>
+                    <button class="close" @click="drop({socName: 'iTunes', stateModel}); user.SocNetworks.iTunes = null; socialModel.tunes.text = ''">X</button>
                 </div>
             </div>
         </div>
@@ -245,7 +251,7 @@
                     <div class="text">
                         <input v-model="socialModel.cloud.text" id="cloudUrl" cloud="text">
                     </div>
-                    <button class="close" @click="set( {newLink: socialModel.cloud.text, socName: 'SoundCloud'} ); 
+                    <button class="close" @click="set( {newLink: socialModel.cloud.text, socName: 'SoundCloud', stateModel} ); 
                     user.SocNetworks.SoundCloud = socialModel.cloud.text;  socialModel.cloud.inputActive = false">Подтвердить</button>
                     <button class="close" @click="socialModel.cloud.inputActive = false">X</button>
                 </div>
@@ -253,7 +259,7 @@
                 <div v-if="user.SocNetworks != null  && user.SocNetworks.SoundCloud != null" class="drop">
                     
                     <span class="link">{{user.SocNetworks.SoundCloud}}</span>
-                    <button class="close" @click="drop('SoundCloud'); user.SocNetworks.SoundCloud = null; socialModel.cloud.text = ''">X</button>
+                    <button class="close" @click="drop({socName: 'SoundCloud', stateModel}); user.SocNetworks.SoundCloud = null; socialModel.cloud.text = ''">X</button>
                 </div>
             </div>
         </div>
@@ -264,11 +270,11 @@
         <div class="bg-block">
             <img src="@/assets/audio-bg.png" alt="bg">
         </div>
-        <h3>О себе</h3>
-        <textarea maxlength="512" cols="30" rows="10" v-model="user.About" @input="saveAbout = true"></textarea>
-        <div>
-            <button class="close save" @click="updateAbout(user.About); saveAbout = false" v-if="saveAbout">Сохранить</button>
-        </div>
+        <h3>
+            <span>О себе</span>
+            <span class="state">{{stateModel.about}}</span>
+        </h3>
+        <textarea @change="updateAbout(stateModel)"  maxlength="512" cols="30" rows="10" v-model="user.About" ></textarea>
      </div>
 
 
@@ -316,7 +322,8 @@ export default {
   data () {
       
       return {
-        selectedCountry: '',
+        selectedCountry: 'Страна',
+        selectedCity: 'Город',
         correctlyImage: false,
         error: false,
         saveAbout: false,
@@ -342,6 +349,10 @@ export default {
                 inputActive: false
             }
         },
+        stateModel:{
+            about: "",
+            social: ""
+        }
       }
   },
    methods:{
@@ -351,15 +362,18 @@ export default {
         this.loadImage = event.target.files[0];
         var imageName = this.loadImage.name;
         if(imageName.includes(".jpg") || imageName.includes(".jpeg" || imageName.includes(".png"))){
-            alert("Изображение успешно загружено");
+            //alert("Изображение успешно загружено");
             this.correctlyImage = true;
         }else {
-            alert("Загружаемый файл должен быть формата изображения: .jpg или .png");
+           // alert("Загружаемый файл должен быть формата изображения: .jpg или .png");
             this.correctlyImage = false;
         }
     },
     countryClick(country){    
         this.$store.dispatch('changeCountry', this.countries.find((el) => {return el.Name == country}))
+    },
+    cityClick(){    
+        this.$store.dispatch('updateCity', this.city.find((el) => {return el.Name == selectedCity}))
     },
     firstnameChange(){
         if(this.user.Firstname != '')
@@ -393,6 +407,39 @@ export default {
 </script>
 
 <style scoped>
+
+.uploadWrapper{
+    margin-top: 1em;
+    margin-left: -1em;
+}
+
+.uploadAvatar{
+ background-color: transparent;
+    font-family: LifelsRU;
+    border: none;
+    color: white;
+    font-size: 1.3em;
+    margin: 0 .5em;
+    cursor: pointer;
+    
+}
+
+.uploadAvatar:hover{
+    color: #552152;
+}
+
+h3{
+    display: flex;
+    justify-content: space-between;
+}
+
+.state{
+    color: white;
+    font-family: slimamif;
+    border: none;
+    color: white;
+    font-size: .8em;
+}
 
 select{
      border: none;
@@ -567,7 +614,7 @@ h2, h3{
 
 
 .wrap{
-    padding: 1em 8em;
+    padding: 1em 16em;
 }
 .block{
     padding: 1em 3em;

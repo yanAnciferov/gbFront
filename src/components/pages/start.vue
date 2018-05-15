@@ -79,11 +79,11 @@ export default {
 }
 
 .logo-wrap{
-    height: 4em;
+    height: 2em;
     position: fixed;
     z-index: 1000000;
     margin-left: 1em;
-    margin-top: .6em;
+    margin-top: 1.85em;
 }
 
 .logo{

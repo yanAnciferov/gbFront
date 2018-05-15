@@ -19,7 +19,7 @@
             </div>
             <div class="right">
                 <div class="name">
-                    {{user.Lastname}} {{user.Firstname}}
+                    {{user.Firstname}} {{user.Lastname}}
                 </div>
                 <div class="location">
                     {{user.City.Country.Name}}, {{user.City.Name}}

@@ -26,7 +26,7 @@
                             </router-link>
                         </div>
                         <div class="location">
-                            
+                            {{item.City.Country.Name}}, {{item.City.Name}}
                         </div>
                         <div  class="result-categories">
                             <div v-for="(cat, index) in item.Categories" :key='index' class="resCategory">
@@ -115,7 +115,7 @@ export default {
 <style scoped>
 
 .count-result{
-    color: #552152;
+    color: white;
     font-family: slimamif;
 }
 
@@ -136,6 +136,7 @@ export default {
     z-index: -1;
     
 }
+
 .result-info-bg img{
     width: 100%;
     height: 100%;
@@ -369,6 +370,11 @@ body{
     color: #969595;
     font-family: slimamif;
     font-weight: bold;
+}
+
+.location{
+    margin-top: -.3em;
+    margin-bottom: .7em;
 }
 
 .ganre ul li{

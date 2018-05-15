@@ -99,20 +99,21 @@ const actions = {
     },
 
 
-    registration({commit, dispatch }, { firstname, lastname, birthdate, email, password, confirmPassword}){
-        if(password == confirmPassword){
-                
+    registration({commit, dispatch },model){
+        
+            console.log(model);
             var data = {
-                "Cityid": 1,
-                "Firstname": firstname,
-                "Lastname": lastname,
-                "BirthDate": birthdate,                    
-                "Password": password,
-                "ConfirmPassword": confirmPassword,
-                "Email": email
+                "Cityid": model.city.Id,
+                "Firstname": model.firstname,
+                "Lastname": model.lastname,
+                "BirthDate": model.birthdate,                    
+                "Password": model.password,
+                "ConfirmPassword": model.confirmPassword,
+                "Email": model.email
                 
             };
-            
+            var email = model.email;
+            var password = model.password
 
             axios.post(serverUrl + '/api/Account/Register',data)
             .then((res)=>{
@@ -124,9 +125,7 @@ const actions = {
             }).catch((err)=>{
                 console.log(err);
             })
-        }else{
-            console.log("error");
-        }
+        
     },
 
     getToken({commit, dispatch }, model){
