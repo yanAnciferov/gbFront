@@ -27,6 +27,10 @@
         <img src="@/assets/like.svg" alt=""> 
         <span>{{audio.CountLikes}}</span>
       </div>
+
+      <div v-if="auth" class="delete">
+        <button @click="deleteAudio(); $emit('delete')">X</button>
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +40,7 @@
 import VueHowler from 'vue-howler'
 
 export default {
-  props:['audio'],
+  props:['audio','auth'],
   mixins: [VueHowler],
   computed:{
     time(){
@@ -64,6 +68,9 @@ export default {
   methods:{
     onLike(){
       this.$store.dispatch("audioLike", this.audio);
+    },
+    deleteAudio(){
+      this.$store.dispatch("deleteAudio", this.audio.Id)
     }
   }
 }
@@ -82,9 +89,19 @@ button{
 .controls{
   display: flex;
   align-items: center;
-  width: 90%;
+  width: 97%;
 }
 
+.delete button{ 
+  color: white;
+  font-family: LifelsRU;
+  font-size: 1.2em;
+  height: auto;
+}
+
+.delete button:hover{ 
+  color: #552152;
+}
 
 .liked span{
   color: #552152;

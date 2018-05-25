@@ -1,19 +1,21 @@
 <template>
   <div class="main-wrapper" >
-    <div class="logo-wrap">
-         <router-link to="/">
-                <img class="logo" src="@/assets/logo-02.svg" alt="">
-        </router-link>
-    </div>
+    
     <div id="scene">
        
         <div data-depth="0.05" class="bgr">
-            <img src="@/assets/fon_start1.png" alt="" >
+            <img src="@/assets/start/fon_start1.png" alt="" >
         </div>
        
          <div data-depth="0.2" class="bgr2">
-            <img src="@/assets/fon_start2.png" alt="" >
+            <img src="@/assets/start/fon_start2.png" alt="" >
         </div>
+
+        <div data-depth="0.2" class="bgr2">
+            <img src="@/assets/start/fon_start3.png" alt="" >
+        </div>
+
+        <div class="filter"></div>
         
          
         <div data-depth="0.25" class="tutty">
@@ -21,7 +23,7 @@
         </div>
         <div data-depth="0.3" class="dialog"> 
             <router-link class="link" to="/categories">
-                <img src="@/assets/start-dialog.png" alt="">
+                <img src="@/assets/start/fon_start4.png" alt="">
             </router-link>
         
         </div>
@@ -52,7 +54,7 @@ export default {
  data(){
     return{
       transitionName: '',
-      tutty: "https://dataskitel.blob.core.windows.net/uipics/tutti_start1.png"
+      tutty: "https://dataskitel.blob.core.windows.net/uipics/tutti2.png"
     }
   },
   created(){
@@ -63,16 +65,26 @@ export default {
   },
     beforeCreate(){
       setInterval(() => {
-          this.tutty = 'https://dataskitel.blob.core.windows.net/uipics/tutti_start2.png'
+          this.tutty = 'https://dataskitel.blob.core.windows.net/uipics/tutti1.png'
       }, 1000)
       setInterval(() => {
-          this.tutty = 'https://dataskitel.blob.core.windows.net/uipics/tutti_start1.png'
+          this.tutty = 'https://dataskitel.blob.core.windows.net/uipics/tutti2.png'
       }, 5000)    
     }
 }
 </script>
 
 <style scoped>
+
+.filter{
+    width: 200vw;
+    height: 200vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #ffffff3f;
+}
 
 .header{
     position: fixed;
@@ -136,13 +148,18 @@ export default {
 .tutty{
     z-index: 1;
     position: absolute;
-    height: 30em;
-    margin-top: 18em;
-    margin-left: 65em;
+    height: 45em;
+    margin-top: 7em;
+    margin-left: 15em;
 }
 
 .tutty img{
     height: 100%;
+}
+
+
+.dialog img{
+    width: 100%;
 }
 
 .dialog{
@@ -152,6 +169,7 @@ export default {
     margin-top: 7em;
     margin-left: 20em;
     position: fixed;
+    width: 45em;
 }
 
 .link{

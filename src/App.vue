@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <Header :showSerach='showSerach' class="header"/>
     <LeftMenu class="menu"/>
      <transition :name="transitionName">
@@ -79,14 +78,9 @@ export default {
             this.showSerach = true;
           }else this.showSerach = false;
 
-        //  if(fromDepth == "categories" && toDepth == "result")
-        //    this.transitionName = 'slide-left'
-        //     else if(fromDepth == "")
-        //   this.transitionName = 'slide-left'
-        //    else if(toDepth == "")
-        //   this.transitionName = 'slide-right'
-        //   else if(toDepth == "result" || toDepth == "categories")
-        //     this.transitionName = 'slide-right'
+          if(fromDepth == 'result'){
+            this.$store.commit('setPrevState', true)
+          }else this.$store.commit('setPrevState', false)
        }
      },
      created(){
@@ -157,7 +151,7 @@ html, body, #app{
 }
 
  .header{
-   top: 1;
+   position: relative;
  }
 
 .load{

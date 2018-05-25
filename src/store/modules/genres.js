@@ -33,67 +33,49 @@ const mutations = {
 
 const actions = {
 
-    // bindCategory({commit, getters}, idList){
-    //     console.log(idList);
-    //     var params = new URLSearchParams();
-    //     params.append("iduser", getters.getUser.Id);
-    //     params.append("categories", idList);
+    bindGenres({commit, getters}, idGenre){
+        console.log(idGenre);
+        var params = new URLSearchParams();
+        params.append("iduser", getters.getUser.Id);
+        params.append("idGenre", idGenre);
         
-    //     var token = localStorage.getItem("tokenKey");
-    //     axios.post(serverUrl + '/api/Category/BindUser', null, {
-    //         headers: {
-    //           'Content-Type': 'multipart/form-data',
-    //           "Authorization": "Bearer " + token
-    //         },
-    //         params
-    //       })
-    //     .then(response => {
-    //         console.log(response)
-    //     })
-    //     .catch(error => {
-    //         console.log(error.response)
-    //     })
-    // },
+        var token = localStorage.getItem("tokenKey");
+        axios.post(serverUrl + '/api/Genres/Bind', null, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              "Authorization": "Bearer " + token
+            },
+            params
+          })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+    },
 
-    // deleteCategory({commit, getters}, idCategory){
-    //     var params = new URLSearchParams();
-    //     params.append( "idcategory", idCategory);
+    unBindGenres({commit, getters}, idGenre){
+        console.log(idGenre);
+        var params = new URLSearchParams();
+        params.append("iduser", getters.getUser.Id);
+        params.append("idGenre", idGenre);
         
-    //     var token = localStorage.getItem("tokenKey");
-    //     axios.post(serverUrl + '/api/Category/Delete', null, {
-    //         headers: {
-    //           'Content-Type': 'multipart/form-data',
-    //           "Authorization": "Bearer " + token
-    //         },
-    //         params
-    //       })
-    //         .then(response => {
-    //           console.log(response)
-    //         })
-    //         .catch(error => {
-    //           console.log(error.response)
-    //         })
-    // },
-
-    // addNewCategory({commit, getters}, categoryName){
-    //     var params = new URLSearchParams();
-    //     params.append( "name", categoryName);
-    //     var token = localStorage.getItem("tokenKey");
-    //     axios.post(serverUrl + '/api/Category/Add', null, {
-    //         headers: {
-    //           'Content-Type': 'multipart/form-data',
-    //           "Authorization": "Bearer " + token
-    //         },
-    //         params
-    //       })
-    //         .then(response => {
-    //           console.log(response)
-    //         })
-    //         .catch(error => {
-    //           console.log(error.response)
-    //         })
-    // },
-
+        var token = localStorage.getItem("tokenKey");
+        axios.post(serverUrl + '/api/Genres/UnBind', null, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              "Authorization": "Bearer " + token
+            },
+            params
+          })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+    },
 
     getGenres({commit}){
         var token = localStorage.getItem("tokenKey");

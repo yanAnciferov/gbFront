@@ -1,6 +1,8 @@
  <template>
     <div class="left-menu-wrapper">
-       
+       <!-- <div class="left-bg">
+           <img src="@/assets/leftbg.svg" alt="">
+       </div> -->
         <div class="left-menu">
              <!-- <div class="bg">
                  <img src="@/assets/profil.png" alt="bg">
@@ -27,15 +29,15 @@
                 <img src="@/assets/leftMenu/enter.svg" alt="">
                 <span class="title">Выход</span>
             </div>
-             <div class="exit item" v-if="!auth">
+             <div class="item" v-if="!auth">
                 <router-link to="/registration">
                     <img src="@/assets/regestration.svg" alt="">
                     <span class="title">Регистрация</span>
                 </router-link>
             </div>
-            <div class="login item" v-if="!auth">
+            <div class="exit item" v-if="!auth">
                 <router-link to="/login">
-                    <img src="@/assets/enter.svg" alt="">
+                    <img src="@/assets/leftMenu/enter.svg" alt="">
                     <span class="title">Вход</span>
                 </router-link>
             </div>
@@ -75,13 +77,27 @@ export default {
 
 <style scoped>
 
+
+.left-bg{
+    position: fixed;
+    top: 0em;
+    left: -2em;
+    width: 25em;
+    height: 50em;
+}
+
+.left-bg img{
+    width: 50%;
+    height: 70%;
+}
+
 .item{
     position: relative;
     height: 4em;
 }
 
 .title {
-    font-family: slimamif;
+    font-family: lifelsRu;
     font-weight: bold;
     
     font-size: 1.5em;
@@ -90,6 +106,12 @@ export default {
     
     left: 2.5em;
     width: auto;
+    color: #552152;
+}
+
+.title:hover {
+    text-decoration: underline;
+    color: #CC9C25;
 }
 
 a{
@@ -127,6 +149,9 @@ a:active, a:hover{
     cursor: pointer;
 }
 
+.exit img{
+    height: 90%;
+}
 
 
 .left-menu img{

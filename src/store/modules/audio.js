@@ -149,15 +149,21 @@ const actions = {
       },
 
 
-      audioDelete({commit, getters},idTrack){
+      deleteAudio({commit, getters, dispatch},idTrack){
         if(getters.isAuthenticated){
             var params = new URLSearchParams();
             params.append("idTrack", idTrack);
             axios.post(serverUrl + '/api/Tracks/Delete', null, {
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded",
+                    "Authorization": "Bearer " + localStorage.getItem("tokenKey")
+               },
                 params
             })
               .then(response => {
-                  commit("removeTrack", idTrack);
+                commit("removeTrack", idTrack);
+                dispatch("getMyData");
+                
               })
               .catch(error => {
                 console.log(error.response)

@@ -3,8 +3,10 @@
     <div id="scene" class="bg">
         <img class="mbg" data-depth="0.05" src="@/assets/fon1.png" alt="">
         <div class="filter"></div>
-        <img data-depth="0.1" src="@/assets/fon2.png" alt="">        
-        <img data-depth="0.2" src="@/assets/fon3.png" alt="">
+        <div class="shtora" data-depth="0.1">
+            <img  src="@/assets/bg/fon1.svg" alt="">        
+        </div>
+        <img data-depth="0.2" src="@/assets/tutti1.png" alt="">
         <form data-depth="0.1" v-if="!isReg"  @submit.prevent="go">
             <h2>Вход</h2>
             <div class="form-element">
@@ -24,7 +26,7 @@
         </form>
 
          <form data-depth="0.1" class="regestr" v-if="isReg" @submit.prevent="reg">
-            <h2 class="hreg">Регестрация</h2>
+            <h2 class="hreg">Регистрация</h2>
             <div class="multy">
                 <div class="form-element">
                     <label for="Name">Как вас зовут? <span v-if="nameValidation" class="bad">*</span>
@@ -94,7 +96,7 @@
                  
              </div>
             <div class="submit-wrapper">
-                <button @click="subClick = true"  type="submit" class="submit regest">Регестрация</button>
+                <button @click="subClick = true"  type="submit" class="submit regest">Регистрация</button>
                            
             </div>
         </form>
@@ -153,7 +155,13 @@ export default {
             year: "Год",
             month: "Месяц",
             day: "День",
-            city: "Город"
+            city: "Город",
+            stopWait: (code) =>
+            {
+                this.waiting = false;
+                if(code == 400)
+                    this.badLogin = true;
+            }
         },
         emailValidState: false,
         waiting: false,
@@ -201,6 +209,7 @@ export default {
                 this.registrationModel.birthdate = new Date(this.registrationModel.year, 
                 this.month.indexOf(this.registrationModel.month), this.registrationModel.day, 0, 0,0);
                this.registrationModel.city = this.cities.find(item => item.Name == this.registrationModel.city)
+               this.waiting = true;
                 this.$store.dispatch("registration", this.registrationModel);
 
             }else console.log("&&&")
@@ -245,7 +254,7 @@ export default {
           month: "getMonth",
       }),
       nameValidation(){
-        return this.registrationModel.firstname.length < 3 || this.registrationModel.lastname.length < 3
+        return this.registrationModel.firstname.length < 2 || this.registrationModel.lastname.length < 2
       },
       passValidation(){
         return this.registrationModel.password.length < 6 
@@ -357,6 +366,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
+
+.shtora{
+    width: 78.5%;
+    margin-top: 4em;
+    margin-left: 12em;
+    z-index: -10;
+}
 
 .mbg{
      z-index: -11;
@@ -491,6 +507,7 @@ export default {
 }
 
 
+
 input, option, select{
     border: none;
     padding: .2em;
@@ -539,6 +556,7 @@ label{
 .bg img{
     width: 100%;
 }
+
 
 
 .wrapper{
@@ -650,4 +668,7 @@ select{
 .regest{
     margin-top: 0;
 }
+
+
+
 </style>

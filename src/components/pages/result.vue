@@ -1,8 +1,10 @@
 <template>
   <div class="result-main-wrap">
     <div class="mbg" id="scene" >
-        <img data-depth="0.1" src="@/assets/bg-profil/fon_profili1.png" alt="bg">
-        <img data-depth="0.2" src="@/assets/bg-profil/fon_profili2.png" alt="bg">
+        <img data-depth="0.05" src="@/assets/bg2/fon3.png" alt="bg">
+        <img data-depth="0.15" src="@/assets/bg2/fon2.png" alt="bg">
+        <img data-depth="0.2" src="@/assets/bg2/fon1.png" alt="bg3">
+        <div class="filter"></div>
     </div>
        <div class="result-info">
             <div class="result-info-content">
@@ -35,7 +37,11 @@
                           
                         </div>
                         <div class="ganre">
-                            
+                            <ul>
+                                 <li @click="genreClick(item)" v-for="(item, index) in item.Genres" v-if='index < 2' :key='item.Name'>
+                                    {{item.Name}}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -114,8 +120,17 @@ export default {
 
 <style scoped>
 
+.filter{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200vw;
+    height: 200vh;
+    background-color: #ffffff5f;
+}
+
 .count-result{
-    color: white;
+    color: #552152;
     font-family: slimamif;
 }
 
@@ -146,7 +161,7 @@ export default {
     position: relative;
     height: 1em;
     width: calc(100% - 16em);
-    margin: 0 9em;
+    margin: 0 15em;
     margin-bottom: 2em;
 }
 
@@ -169,7 +184,7 @@ export default {
 .mbg{
     z-index: -10;
     position: fixed;
-    top: -1em;
+    top: -5em;
     left: -1em;
 }
 
@@ -195,8 +210,8 @@ body{
     content: ' ';
     background-color: white;
     border-radius: 50%;
-    height: calc(2.8em - 1px);
-    width: 2.7em;
+    height: calc(2.3em - 1px);
+    width: 2.2em;
     margin-bottom: 1em;
     display: block;
     z-index: -1;
@@ -207,8 +222,8 @@ body{
 
 .resCategory {
     position: relative;
-    width: 3em;
-    height: 3em;
+    width: 2.5em;
+    height: 2.5em;
 }
 
 .resCategory img{
@@ -217,6 +232,8 @@ body{
 }
 
 .result-categories{
+    
+    margin-bottom: .7em;
     display: flex;
     width: 100%;
 }
@@ -231,6 +248,11 @@ body{
     position: fixed;
     top: 0;
     left: 0;
+}
+
+
+.bg3{
+    
 }
 
 
@@ -318,10 +340,10 @@ body{
 .user-result{
     position: relative;
     width: 25em;
-    height: 7em;
+    height: 10em;
     display: flex;
     margin: 0 .5em;
-    margin-bottom: 5em;
+    margin-bottom: 1em;
     
 }
 
@@ -335,11 +357,13 @@ body{
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
     z-index: -5;
 }
 
 .result-bg img{
     width: 100%;
+    height: 100%;
 }
 
 .result-categories{
@@ -355,7 +379,7 @@ body{
 }
 
 .result-content{
-    padding: .5em;
+    padding: 1em;
 }
 
 .result-content .name{
@@ -380,6 +404,7 @@ body{
 .ganre ul li{
     list-style: none;
     margin-right: .5em;
+    color:#DC9E02;
 }
 
 .ganre ul{
@@ -389,6 +414,7 @@ body{
     margin: 0;
     font-family: slimamif;
     font-weight: bold;
+    flex-wrap: wrap;
 }
 
 .circle{
@@ -449,7 +475,7 @@ body{
 }
 
 .result-v2{
-    padding: 0 8em;
+    padding: 0 14em;
     padding-right: 0;
     display: flex;
     box-sizing: border-box;

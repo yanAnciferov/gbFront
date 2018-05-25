@@ -30,15 +30,15 @@
             <div class="selectionGenres" @click="genrePick = true">
                 <span>#жанры</span> 
                 <img class="arrow" src="@/assets/cursor.svg" alt="">
+                <div v-if="genrePick" class="genresWindow">
+                    <ul>
+                        <li @click="genWinClick(item)" v-for="(item, index) in getGenres" :key='index'>
+                            {{item.Name}}
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div v-if="genrePick" class="genresWindow">
-                <ul>
-                    <li @click="genWinClick(item)" v-for="(item, index) in getGenres" :key='index'>
-                        {{item.Name}}
-                    </li>
-                </ul>
-                
-            </div>
+            
             <div v-if="genrePick" @click="genrePick = false" class="geo-bg"></div>
 
             <div :class="{geolocation: true, 'active-geo': geoPick}" @click="geoPick = true">
@@ -173,12 +173,17 @@ export default {
 
 <style scoped>
 
+header{
+    z-index: 105;
+}
+
 .selectionGenres{
     cursor: pointer;
         color:#5B4069;
     font-family: LifelsRU;
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    position: relative;
 }
 
 .selectionGenres:hover{
@@ -189,9 +194,12 @@ export default {
     z-index: 165;
     border-radius: 7px;
     max-height: 15em;
-    overflow: hidden;
-    position: relative;
-    top: 6.5em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    top: 1.5em;
+    right: 0;
+    font-size: .7em;
 }
 
 .search-btn{
@@ -212,15 +220,17 @@ export default {
     overflow-y: hidden;
 }
 
+
+
+
+
 .selectedGenre{
     margin: 0 .5em;  
     color:#5B4069;
     font-family: LifelsRU;
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.5em;
     cursor: pointer;
-    width: auto;
-    display: inline;
 }
 
 .selectedGenre:hover{
@@ -324,6 +334,12 @@ ul{
 
 }
 
+.cityul{
+    max-height: 20em;
+    
+    overflow-y: scroll;
+}
+
 .header{
     box-sizing: border-box;
    
@@ -337,7 +353,7 @@ ul{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 105;
+    z-index: 155;
     height: 4em;
 }
 
@@ -410,7 +426,7 @@ ul{
 }
 
 .search-panel{
-    margin-left: 2em;
+    margin-left: 4em;
 }
 
 .search-panel input{
@@ -423,6 +439,7 @@ ul{
 }
 .logo{
     height: 2em;
+    margin-left: 3.2em;
 }
 
 .geolocation{

@@ -34,7 +34,7 @@ const mutations = {
 }
 
 const actions = {
-    getUser({commit}, login){
+    getUser({commit,dispatch}, login){
         commit("setCurrentUserPage", null);
         axios.get(serverUrl + '/api/Account/get/login',{
             params: {login}
@@ -42,6 +42,8 @@ const actions = {
         .then((res)=>{
             commit("setCurrentUserPage", res.data);
             commit("setUserCategory", res.data.Categories);
+            console.log(res)
+            dispatch("getAudioList", res.data.Id);
         }).catch((err)=>{
             console.log(err);
             router.replace("/404");

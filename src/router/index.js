@@ -96,7 +96,7 @@ export default new Router({
       component: UserPage
       
     }, 
-    { path: '/404', component: NotFound },  
-    { path: '*', component: NotFound },  
+    // { path: '/404', component: NotFound },  
+    // { path: '*', component: NotFound },  
   ]
 })

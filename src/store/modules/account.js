@@ -5,7 +5,8 @@ var serverUrl = "https://skitel.azurewebsites.net";
 
 const state = {
     user: null,
-    authenticated: false
+    authenticated: false,
+    prevIsResult: false
 }
 
 
@@ -13,18 +14,19 @@ const getters = {
     isAuthenticated: state => {return state.authenticated },
     getUser: state => { return state.user },
     getMyLogin: state => { return state.user.Login },
-    isMyPage(state, login){
-        if(state.authenticated == false)
-            return false;
-        return state.user.Login === login;
+    isMyPage(state){
+        return state.authenticated && state.user.Login == state.currentUserPage.Login;
+    },
+    prevIsResult(state){
+        return state.prevIsResult
     }
 }
 
 const actions = {
 
-    uploadAvatar ({commit, getters}) {
+    uploadAvatar ({commit, getters, dispatch}, model) {
         var s = this
-
+        
         var imagefile = document.querySelector('#file');
         const data = new FormData();
         data.append('upload', imagefile.files[0]);
@@ -41,9 +43,12 @@ const actions = {
         })
           .then(response => {
             console.log(response)
+            
+            dispatch("getMyData");
           })
           .catch(error => {
             console.log(error.response)
+            
           })
       },
 
@@ -61,7 +66,7 @@ const actions = {
         })
     },
 
-    getMyData({commit, getters}, isLogin){
+    getMyData({commit, getters, dispatch}, isLogin){
             
         commit("setCurrentUserPage", null);
         var email = localStorage.getItem("username");
@@ -82,6 +87,7 @@ const actions = {
             commit("setCurrentUserPage", res.data);
             commit("setUserCategory", res.data.Categories);
             console.log(res.data);
+            dispatch("getAudioList", res.data.Id);
             if(isLogin == true)
                 router.push(res.data.Login);
 
@@ -118,12 +124,14 @@ const actions = {
             axios.post(serverUrl + '/api/Account/Register',data)
             .then((res)=>{
                 console.log(res);
+                model.stopWait();
                 if(res.status == 200){
                     dispatch("getToken", { email, password} );
                 }
                     
             }).catch((err)=>{
                 console.log(err);
+                model.stopWait(400);
             })
         
     },
@@ -179,6 +187,10 @@ const mutations = {
     if(localStorage.getItem("tokenKey") !== null){
         state.authenticated = true;
         }
+    },
+
+    setPrevState(state, newState){
+        state.prevIsResult = newState;
     }
 }
 

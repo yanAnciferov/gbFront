@@ -130,7 +130,7 @@ const actions = {
       params.append("iduser", getters.getUser.Id);
       params.append("phoneNumber", phone);
 
-      axios.post(serverUrl + '/api/Account/dropPhoneNumber', null, {
+      axios.post(serverUrl + '/api/Account/setPhoneNumber', null, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: "Bearer " + localStorage.getItem("tokenKey")

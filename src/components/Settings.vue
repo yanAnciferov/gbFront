@@ -1,8 +1,10 @@
  <template>
  <div class="wrap">
-    <div class="mbg" id="scene" >
-        <img data-depth="0.1" src="@/assets/bg-profil/fon_profili1.png" alt="bg">
-        <img data-depth="0.2" src="@/assets/bg-profil/fon_profili2.png" alt="bg">
+   <div class="mbg" id="scene" >
+        <img data-depth="0.05" src="@/assets/bg2/fon3.png" alt="bg">
+        <img data-depth="0.15" src="@/assets/bg2/fon2.png" alt="bg">
+        <img data-depth="0.2" src="@/assets/bg2/fon1.png" alt="bg3">
+        <div class="filter"></div>
     </div>
     <h2></h2>
      
@@ -37,7 +39,9 @@
                 <!-- <span class="error" v-if="error">Формат файла должен быть .mp3</span> -->
 
                 <div class="uploadWrapper">
-                    <input class="uploadAvatar" v-if="imageUrl" type=button value=Загрузить @click="uploadAvatar">
+                    <input class="uploadAvatar" v-if="imageUrl" type=button value=Загрузить 
+                    @click="uploadAvatar(correctlyImage); correctlyImage = false">
+                    
                 </div>
                 
                 </form>
@@ -85,7 +89,8 @@
                          <label for="">Номер телефона</label>
                         <div class="horiz">
                             <p class="formRow">
-                                <input @blur="phoneChange" v-model="user.Phone" type="text">
+                                <input @blur="phoneChange" v-model="phone" type="text">
+                                <span class="error" v-if="!checkNum">Указан не верный формат</span>
                             </p>
                         </div>
                     </div>
@@ -93,31 +98,34 @@
             </div>
         </div>
      </div>
-     <div v-if="false" class="block">
-        <h3>Сменить пароль</h3>
-        <form id="uploadForm" name="uploadForm" enctype="multipart/form-data">
+     <div  class="block">
+        <div class="bg-block">
+            <img src="@/assets/audio-bg.png" alt="bg">
+        </div>
+        <h3>Жанры</h3>
+        <div class="wrap-genr">
+            <div class="all-genr genr-list">
+                <label>Все жанры</label>
+                <ul>
+                    <li @click="genreClick(item)" v-for="(item) in genres" :key='item.Name'>
+                        {{item.Name}}
+                    </li>
+                </ul>
+            </div>
 
-            <p class="formRow">
-                <label for="currentPassword">Введите ваш текущий пароль</label>
-                <input name="currentPassword" type="text">
-            </p>
-            <p class="formRow">
-                <label for="newPassword">Введите новый пароль</label>
-                <input name="newPassword"  type="text">
-            </p>
-            <p class="formRow">
-                <label for="confirmPassword">Подтвердите новый пароль</label>
-                <input name="confirmPassword" type="text">
-            </p>
 
-            <input type=button value=Подтвердить>
-
-        </form>
+            <div class="my-genr genr-list">
+                <label>Мои жанры</label>
+                <ul>
+                    <li @click="genreClick(item)" v-for="(item) in user.Genres" :key='item.Name'>
+                        {{item.Name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
      </div>
 
-    <div v-if="false" class="block">
-        <button class="button">Удалить аккаунт</button>
-    </div>
+
 
     <div class="block">
         <div class="bg-block">
@@ -131,7 +139,7 @@
         <div class="social">
             <div class="name">
                 <img src="" alt="">
-                <span>Facebook</span>
+                <label>Facebook</label>
             </div>
             <div class="link">
                 <div v-if="(user.SocNetworks == null || user.SocNetworks.FaceBook == null)  && !socialModel.fb.inputActive" class="add">
@@ -158,7 +166,7 @@
        <div class="social">
             <div class="name">
                 <img src="" alt="">
-                <span>Instagram</span>
+                <label>Instagram</label>
             </div>
             <div class="link">
                 <div v-if="(user.SocNetworks == null || user.SocNetworks.Instagram == null)  && !socialModel.inst.inputActive" class="add">
@@ -169,8 +177,7 @@
                     <div class="text">
                         <input v-model="socialModel.inst.text" id="instUrl" type="text">
                     </div>
-                    <button class="close" @click="set( {newLink: socialModel.inst.text, socName: 'Instagram', stateModel} ); 
-                    user.SocNetworks.Instagram = socialModel.inst.text;  socialModel.inst.inputActive = false">Подтвердить</button>
+                    <button class="close" @click="instApply">Подтвердить</button>
                     <button class="close" @click="socialModel.inst.inputActive = false">X</button>
                 </div>
 
@@ -186,7 +193,7 @@
         <div class="social">
             <div class="name">
                 <img src="" alt="">
-                <span>YouTube</span>
+                <label>YouTube</label>
             </div>
             <div class="link">
                 <div v-if="(user.SocNetworks == null || user.SocNetworks.YouTube == null)  && !socialModel.tube.inputActive" class="add">
@@ -213,7 +220,7 @@
         <div class="social">
             <div class="name">
                 <img src="" alt="">
-                <span>iTunes</span>
+                <label>iTunes</label>
             </div>
             <div class="link">
                 <div v-if="(user.SocNetworks == null || user.SocNetworks.iTunes == null)  && !socialModel.tunes.inputActive" class="add">
@@ -240,7 +247,7 @@
         <div class="social">
             <div class="name">
                 <img src="" alt="">
-                <span>SoundCloud</span>
+                <label>SoundCloud</label>
             </div>
             <div class="link">
                 <div v-if="(user.SocNetworks == null || user.SocNetworks.SoundCloud == null)  && !socialModel.cloud.inputActive" class="add">
@@ -351,13 +358,16 @@ export default {
         },
         stateModel:{
             about: "",
-            social: ""
-        }
+            social: "",
+            loadAvatar: ""
+        },
+        phone: ''
       }
   },
    methods:{
 
-    ...mapActions(["uploadAvatar", 'set','drop', 'updateAbout']),
+    ...mapActions(["uploadAvatar", 'set','drop', 
+    'updateAbout', 'bindGenres', 'unBindGenres', 'setPhone']),
     processFile(event) {
         this.loadImage = event.target.files[0];
         var imageName = this.loadImage.name;
@@ -384,14 +394,49 @@ export default {
             this.$store.dispatch('updateLastName',this.user.Lastname)
     }, 
     phoneChange(){
-        
+        this.setPhone(this.phone);
+    },
+    genreClick(genre){
+        if(this.user.Genres.find(gen => gen.Id == genre.Id) == undefined){
+            this.user.Genres.push(genre);
+            this.bindGenres(genre.Id);
+        }else{
+            var index = this.user.Genres.findIndex(gen => genre.Id == gen.Id);
+            this.user.Genres.splice(index ,1)
+            this.unBindGenres(genre.Id);
+        }
+    },
+    instApply(){
+        this.set( {newLink: this.socialModel.inst.text, socName: 'Instagram', stateModel: this.stateModel} ); 
+        if(this.user.SocNetworks != null){
+            this.user.SocNetworks.Instagram = this.socialModel.inst.text;
+        }else{
+            this.user.SocNetworks = {
+                Instagram: this.socialModel.inst.text
+            }
+        }
+        this.socialModel.inst.inputActive = false
     }
   },
   computed:{
-      ...mapGetters({user: "getUser", countries: "getCountryList", city: 'getCityList'}),
+      ...mapGetters({
+        user: "getUser", 
+        countries: "getCountryList",
+        city: 'getCityList',
+        allGenres: 'getGenres'
+        }),
       imageUrl(){
           console.log(this.correctlyImage)
         return this.correctlyImage;
+      },
+      genres(){
+          return this.allGenres.filter((aGen) => {
+              return this.user.Genres.find(gen => gen.Id == aGen.Id) == undefined
+          });      
+      },
+      checkNum(){
+          var reg = /^\+?\d{1,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d\d\d[- .]?\d\d\d\d$/
+          return reg.test(this.phone) || this.phone == null
       }
   },
   beforeCreate(){
@@ -402,11 +447,57 @@ export default {
             var scene = document.getElementById('scene');
             var parallaxInstance = new Parallax(scene);
         }, 500)
+      this.phone = this.user.PhoneNumber;
     }
 }
 </script>
 
 <style scoped>
+
+.error{
+    color: rgb(82, 17, 17);
+    font-family: slimamif;
+    font-weight: bold;
+}
+
+.wrap-genr{
+    display: flex;
+    height: 13em;
+}
+
+.genr-list{
+    margin-bottom: 2em;
+     width: 40%;
+}
+
+.filter{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200vw;
+    height: 200vh;
+    background-color: #ffffff5f;
+}
+
+.genr-list ul{
+    margin-top: .5em;
+    list-style: none;
+    color: white;
+     font-family: LifelsRU;
+     display: flex;
+     flex-wrap: wrap;
+     padding: 0;
+}
+
+.genr-list ul li{
+    cursor: pointer;
+    margin-right: 1em;
+    font-size: 1.2em;
+}
+
+.genr-list ul li:hover{
+    text-decoration: underline;
+}
 
 .uploadWrapper{
     margin-top: 1em;
@@ -586,7 +677,7 @@ div.social{
 .mbg{
     z-index: -10;
     position: fixed;
-    top: -1em;
+    top: -5em;
     left: -1em;
 }
 
@@ -615,6 +706,7 @@ h2, h3{
 
 .wrap{
     padding: 1em 16em;
+    padding-left: 14em;
 }
 .block{
     padding: 1em 3em;

@@ -1,12 +1,19 @@
 <template>
- <div v-if="user != null" class="up-wrap">
+ <div class="up-wrap">
     <div class="mbg" id="scene" >
-        <img data-depth="0.1" src="@/assets/bg-profil/fon_profili1.png" alt="bg">
-        <img data-depth="0.2" src="@/assets/bg-profil/fon_profili2.png" alt="bg">
+        <img data-depth="0.05" src="@/assets/bg2/fon3.png" alt="bg">
+        <img data-depth="0.15" src="@/assets/bg2/fon2.png" alt="bg">
+        <img data-depth="0.2" src="@/assets/bg2/fon1.png" alt="bg3">
+        <div class="filter" ></div>
     </div>
-   <div class="user-info">
+    <div class="toRes" v-if="prevRes">
+        <router-link to="result">
+            <img src="@/assets/tutty/nazad.svg" alt="">
+        </router-link>
+    </div>
+   <div v-if="user != null" class="user-info">
        <div class="bg">
-           <img src="@/assets/profil.png" alt="bg">
+           <img src="@/assets/bg-profil/dp.svg" alt="bg">
        </div>
 
         <div class="content">
@@ -24,8 +31,8 @@
                 <div class="location">
                     {{user.City.Country.Name}}, {{user.City.Name}}
                 </div>
-                <div class="phone">
-                    +39428304567
+                <div v-if="user.PhoneNumber != null" class="phone">
+                    {{user.PhoneNumber}}
                 </div>
                 <div v-if="user.SocNetworks != null" class="social">
                     <a v-if="user.SocNetworks.FaceBook != null" :href="user.SocNetworks.FaceBook">
@@ -50,18 +57,10 @@
                 </div>
                 <div class="ganres">
                     <ul>
-                        <li>
-                            #rock
+                        <li v-for="(item) in user.Genres" :key="item.Name">
+                            {{item.Name}}
                         </li>
-                         <li>
-                            #classic
-                        </li>
-                         <li>
-                            #pop
-                        </li>
-                         <li>
-                            #hiphop
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -75,17 +74,18 @@
    </div>
 
 
-   <div class="play-content">
+   <div v-if="user != null" class="play-content">
        <div class="bgp">
            <img src="@/assets/audio-bg.png" alt="bg">
        </div>
-       <button class="btn add" @click="addWin = true" v-if="isMyPage">
+       <button class="btn add" @click="addWin = true" v-if="isMyPage && user != null">
            Добавить
        </button>
-       <div class="music">
+       <div v-if="user.Categories.length == 0 && user != null" class="info">{{youOrNot}}</div>
+       <div class="music" v-if="user != null">
             <div class="tracks">
                 <div class="track" v-for="(item, index) in trackForShow" :key="index">
-                    <howler preload :audio='item' :sources='[item.Url]' ></howler>
+                    <howler @delete="getAudioList(user.Id);" :auth='isMyPage' :audio='item' :sources='[item.Url]' ></howler>
                 </div>
             </div>
             <div class="categories">
@@ -95,10 +95,9 @@
                 </div>
             </div>
        </div>
-      
    </div>
 
-   <addAudio @close='addWin = false; getAudioList(user.Id)' v-if="addWin"/>
+   <addAudio @close='addWin = false; getAudioList(user.Id); updateAudio()' v-if="addWin"/>
  </div>
 </template>
 
@@ -132,11 +131,14 @@ export default {
   },
   methods:{
       ...mapActions(["getUser", "getMyData",'getAudioList']),
-      startPlay(){
-          this.$store.commit("setSoundToPlayer", "http://localhost:65266/Images/wakeup.mp3");
-      },
+      
       updateAudio(){
-          this.getAudioList(this.user.Id);
+         if(this.isMyPage){
+            this.$store.dispatch("getMyData");
+        }else{
+            this.$store.dispatch("getUser", getCurrentPageUser.Login);
+        }
+         
       },
       catClick(item){
           var index = this.selectedCat.indexOf(item);
@@ -152,7 +154,9 @@ export default {
         myLogin: "getMyLogin",
         isAuth: "isAuthenticated",
         categories: "getUserCategory",
-        audios: "getUserPageAudioList"
+        audios: "getUserPageAudioList",
+        prevRes: "prevIsResult"
+        
       }),
       likes(){
           var sumLikes = 0;
@@ -175,6 +179,11 @@ export default {
               });
               return res;
           }
+      },
+      youOrNot(){
+          if(this.isMyPage){
+              return 'Вы пока не добавили ни одного трека'
+          }else return 'Пользователь пока не добавил ни одного трека'
       }
       
   },
@@ -191,10 +200,12 @@ export default {
         this.$store.dispatch("getUser", this.$route.params["login"]);
     }
 
+    this.$store.commit("setUserPageAudioList", []);
+      
     setTimeout(() => {
         var scene = document.getElementById('scene');
         var parallaxInstance = new Parallax(scene);
-        this.getAudioList(this.user.Id);
+         // this.getAudioList(this.user.Id);
     }, 500);
 
     
@@ -207,6 +218,12 @@ export default {
       }else{
           this.$store.dispatch("getUser", this.$route.params["login"]);
       }
+
+      this.$store.commit("setUserPageAudioList", []);
+
+       setTimeout(() => {
+         // this.getAudioList(this.user.Id);
+        }, 500);
       next();
   }
 }
@@ -214,6 +231,16 @@ export default {
 
 <style scoped>
 
+.toRes{
+    position: fixed;
+    bottom: -1em;
+    left: 1em;
+    width: 15em;
+}
+
+.toRes img{
+    width: 100%;
+}
 
 .category.active:hover::before{
      content: ' ';
@@ -241,6 +268,15 @@ export default {
     position: absolute;
     top: 3px;
     left: 2px;
+}
+
+.filter{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200vw;
+    height: 200vh;
+    background-color: #ffffff4f;
 }
 
 .category:hover::before{
@@ -271,6 +307,15 @@ export default {
     left: 2px;
 }
 
+.info{
+    display: flex;
+    justify-content: center;
+    height: 85%;
+    align-items: center;
+    color: white;
+    font-family: slimamif;
+    font-weight: bold;
+}
 
 
 .track{
@@ -296,18 +341,19 @@ export default {
 
 .ganres ul{
     list-style: none;
-    color:#552152;
+    color:#CC9C25;
     font-family: slimamif;
     font-weight: bold;
-    font-size: 1.4em;
+    font-size: 1.2em;
     display: flex;
     flex-wrap: wrap;
     padding: 0;
+    margin-top: .4em;
 }
 
 .ganres ul li{
     margin-right: .5em;
-    margin-bottom: .5em;
+    margin-bottom: .2em;
 }
 
 .music{
@@ -349,7 +395,7 @@ a span{
 .mbg{
     z-index: -10;
     position: fixed;
-    top: -1em;
+    top: -5em;
     left: -1em;
 }
 
@@ -365,7 +411,6 @@ a span{
     border: none;
     color: white;
     font-size: 1.3em;
-    margin: 0 .5em;
     cursor: pointer;
 }
 
@@ -397,7 +442,7 @@ a span{
     position: relative;
     padding: 3em;
     box-sizing: border-box;
-    max-width: 57vw;
+    max-width: 50vw;
 }
 
 .play-content, .bgp{
@@ -408,8 +453,10 @@ a span{
 .user-info{
     position: relative;
     padding: 1em;
+    padding-right: 5em;
     box-sizing: border-box;
-    margin-right: 2em;
+    margin-right: -2em;
+    margin-left: 7em;
 }
 
 
@@ -446,7 +493,7 @@ a span{
 .name{
     font-family: LifelsRU;
     font-weight: bold;
-    color: #552152;
+    color: #CC9C25;
     font-size: 1.5em;
     margin-top: 1em;
 }
@@ -464,7 +511,7 @@ a span{
     font-family: slimamif;
     font-weight: bold;
     font-size: 1em;
-    margin-top: .2em;
+    margin-top: .5em;
 }
 
 .right{

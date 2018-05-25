@@ -190,10 +190,10 @@ export default {
 }
 
 .next-step{
-    width: 15em;
+    width: 18em;
     position: fixed;
     bottom: -1.3em;
-    right: .5em;
+    right: 1em;
     cursor: pointer;
 
 }
@@ -254,10 +254,10 @@ body{
 }
 
 .c-wrapper{
-    max-width: 1080px;
+    max-width: 930px;
     margin: 0 auto;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 2em;
    
 }
